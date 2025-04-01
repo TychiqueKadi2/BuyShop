@@ -1,36 +1,43 @@
 # BuyShop
 
-Community Marketplace
+# Community Marketplace
+
 BuyShop is a Community Marketplace project! This platform is designed to empower individuals to buy and sell second-hand goods at fair prices. By simplifying the process and creating a space for ethical transactions, our mission is to disrupt exploitative systems and support local communities, by providing cash to those who need it and great deals to those who need that.
 
-Features
-Simple Listings: Sellers can easily upload their items without needing to create a storefront.
+# Features
 
-Fair Pricing: AI-driven or community-backed price suggestions for equitable transactions, by way of a 2 day bidding negotiation.
+*Simple Listings: Sellers can easily upload their items without needing to create a storefront.
 
-Secure Payments: Built-in secure payment options for smooth transactions.
+*Fair Pricing: AI-driven or community-backed price suggestions for equitable transactions, by way of a 2 day bidding negotiation.
 
-Local Impact: Connecting buyers and sellers within their communities.
+*Secure Payments: Built-in secure payment options for smooth transactions.
 
-Mobile Optimization: A seamless experience for smartphone users.
+*Local Impact: Connecting buyers and sellers within their communities.
 
-Tech Stack
-Frontend:
+*Mobile Optimization: A seamless experience for smartphone users.
+
+# Tech Stack
+
+*Frontend:
+
 Framework/Library: To be determined (e.g., React, Vue, or Angular)
 
 Additional Tools: To be determined (e.g., TailwindCSS for styling or Axios for API calls)
 
-Backend:
+*Backend:
+
 Framework: To be determined (e.g., Node.js with Express or Django)
 
 Database: To be determined (e.g., PostgreSQL or MongoDB)
 
-Additional Tools: To be determined (e.g., Firebase for authentication, or GraphQL for API design)
+# Additional Tools: To be determined (e.g., Firebase for authentication, or GraphQL for API design)
 
-Getting Started
+# Getting Started
+
 *Fork the repo and create branch.
 
-Roadmap
+# Roadmap
+
 [ ] Implement basic user authentication
 
 [ ] Develop the item listing system
@@ -43,9 +50,11 @@ Roadmap
 
 [ ] Launch web but mobile-first/friendly designs
 
-GOALS
+# GOALS
+
 *Deploy in 2 weeks, extra one quick contengency
 
-VALUES
+# VALUES
+
 *Customer focused
 *Speed
