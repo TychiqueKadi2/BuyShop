@@ -1,0 +1,12 @@
+post http://localhost:8000/auth/login/seller/
+Content-Type: application/json
+
+{
+    "email": "lekan4jesu@gmail.com",
+    "password": "seller123"
+}
+
+# {
+#     "email": "lekanmojibola@gmail.com",
+#     "password": "oladev123"
+# }
