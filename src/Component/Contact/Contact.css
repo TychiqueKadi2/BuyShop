@@ -1,0 +1,132 @@
+.contact_container{
+    display: flex;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'roboto',sans-serif;
+}
+.contact_info{
+    margin-bottom: 40px;
+
+}
+.contact_info h2{
+    font-size: 2.3rem;
+    font-weight: bolder;
+}
+.contact_info p{
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 5px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.icons_container{
+    display: flex;
+    align-items: center;
+    border: none;
+    background: #ddd ;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+.consIcon{
+    font-size: 3rem;
+    color: #555;
+    margin-left: 1rem;
+}
+.icons_container input,
+.icons_container textarea{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+.icons_container textarea{
+    resize: none;
+}
+.info_item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+.contact_icons{
+    font-size: 1.7rem;
+    color: orange;
+}
+.contact_form {
+    max-width: 50%;
+    justify-content: space-between;
+}
+.input_group{
+    display: flex;
+    gap: 10px;
+}
+.contact_form input,.contact_form textarea{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #ddd;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.contact_form textarea{
+    height: 100px;
+}
+.contact_btn{
+    background: orange;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.contact_btn:hover{
+    background: darkorange;
+}
+@media (min-width: 320px) and (max-width: 678px) {
+    .contact_container{
+        flex-direction: column;
+    }
+    .contact_form{
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+    }
+    .contact_btn{
+        font-size: 1.4rem;
+    }
+    .contact_info p{
+        font-size: 1.3rem;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+    .contact_container{
+        flex-direction: column;
+    }
+    .contact_form{
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+    }
+    .contact_btn{
+        font-size: 1.4rem;
+    }
+    .contact_form input,.contact_form textarea{
+        font-size: 1.6rem;
+    }
+    .contact_info p{
+        font-size: 2rem;
+    }
+    .contact_info h2{
+        font-size: 3rem;
+    }
+    .contact_icons{
+        font-size: 3rem;
+    }
+}

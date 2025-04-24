@@ -1,0 +1,111 @@
+.cta_container{
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 70px auto;
+    padding: 20px;
+    font-family: 'roboto',sans-serif;
+}
+.cta_text{
+    flex: 1;
+    text-transform: capitalize;
+    background: orange;
+    color: #fff;
+    padding: 100px;
+    border-radius: 8px;
+}
+.cta_text h2{
+    font-family: 'Montserrat',sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.cta_button{
+    background: #fff;
+    color: orange;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.cta_button:hover{
+    background: darkorange;
+    color: #fff;
+}
+.cta_image{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.cta_image img{
+    max-width: 138%;
+    height: auto;
+    border-radius: 8px;margin-left: -2rem;
+    margin-top: 0.1rem;
+}
+
+@media (min-width: 320px) and (max-width: 678px) {
+    .cta_container{
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+    
+    }
+    .cta_text{
+        max-width: 40%;
+    }
+    .cta_text h2{
+        margin-top: -2rem;
+        font-size: 3rem;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    .cta_text p{
+        font-size: 1.5rem;
+        line-height: 1.2;
+        max-width: 1000%;
+    }
+    .cta_button{
+        font-size: 1.4rem;
+        max-width: 1000%;
+        text-transform: capitalize;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .cta_container{
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        margin-left: 8rem;
+    
+    }
+    .cta_text{
+        max-width: 40%;
+    }
+    .cta_text h2{
+        margin-top: -2rem;
+        font-size: 3rem;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    .cta_text p{
+        font-size: 2rem;
+        line-height: 1.2;
+        max-width: 1000%;
+    }
+    .cta_button{
+        font-size: 1.4rem;
+        max-width: 1000%;
+        text-transform: capitalize;
+    }
+    .cta_image img{
+        display: none ;
+    }
+}

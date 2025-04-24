@@ -1,0 +1,152 @@
+.footer{
+    width: 100%;
+    bottom: 0;
+    background: #eeeeee;
+    text-align: center;    
+}
+
+.footer-logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+.footer-logo .icons{
+    font-size: 20px;
+}
+.newsletter form{
+    margin: 20px 0;
+}
+.newsletter input{
+    padding: 10px;
+    width: 200px;
+}
+.newsletter .footer_btns{
+    padding: 10px;
+    background: orange;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.footer-links{
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+.footer-column h3{
+    font-size: 16px;
+}
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+.footer-column ul li a{
+    color: #817d7d;
+    text-decoration: none;
+}
+.footer-bottom{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.footer-bottom select{
+    padding: 5px;
+}
+.footer-bottom ul{
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+}
+.footer-bottom ul li a {
+    text-decoration: none;
+    color: black;
+}
+.social-media-icons a {
+    width: 24px;
+    margin: 5px;
+}
+.twitter{
+    color: rgb(47, 219, 250);
+    font-size: 1.3rem;
+}
+.linkedin{
+    color: #fff;
+    background: blue;
+    border-radius: 3px;
+    font-size: 1.2rem;
+}
+.youtube{
+    color: red;
+    font-size: 1.4rem;
+}
+.footer-logo img{
+    width: 50px;
+    margin-top: 0.3rem;
+}
+.facebook{
+    font-size: 1.3rem;
+}
+@media (min-width: 320px) and (max-width: 678px){
+    .footer-links{
+        flex-direction: column;
+    }
+    .footer-column h3{
+        font-size: 2rem;
+    }
+    .footer-column ul li a{
+        width: 90%;
+        font-size: 1.5rem;
+        flex-direction: column;
+    }
+   
+    .footer-bottom ul li a{
+        font-size: 1.2rem;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px){
+    .footer-column h3{
+        font-size: 2rem;
+    }
+    .footer-column ul li a{
+        color: green;
+        width: 90%;
+        font-size: 1.5rem;
+        flex-direction: column;
+    }
+   
+    .footer-bottom ul li a{
+        font-size: 1.6rem;
+    }
+    .twitter{
+        color: rgb(47, 219, 250);
+        font-size: 1.9rem;
+    }
+    .linkedin{
+        color: #fff;
+        background: blue;
+        border-radius: 3px;
+        font-size: 1.9rem;
+    }
+    .youtube{
+        color: red;
+        font-size: 1.9rem;
+    }
+    .facebook{
+        font-size: 1.9rem;
+    }
+    .newsletter input{
+        padding: 19px;
+        font-size: 1.5rem;
+        margin-top: 1rem;
+    }
+    .footer-logo h2{
+        font-size: 2.7rem;
+    }
+    .newsletter p{
+        font-size: 2rem;
+    }
+}

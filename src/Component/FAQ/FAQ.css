@@ -1,0 +1,114 @@
+.faq{
+    top: 1396px; 
+    width: 100%;
+    height: 100%; 
+    background: #FFFFFFFF; /* white */
+    border-radius: 0px; 
+}
+.faq h1{
+    text-align: center;
+    top: 96px;  
+  height: 68px; 
+  font-family: 'Montserrat',sans-serif; /* Heading */
+  font-size: 48px; 
+  line-height: 68px; 
+  font-weight: 700; 
+  color: #171A1FFF; /* neutral-900 */
+}
+.down{
+   margin-left: 2rem;
+   align-items: flex-start;
+    font-size: 1.7rem;
+    background: #ddd;
+    border-radius: 5px;
+}
+.up{
+    margin-left: 2rem;
+    font-size: 1.7rem;
+    background: #ddd;
+    border-radius: 5px;
+}
+.faq p{
+    top: 172px; 
+    text-align: center;
+    height: 28px; 
+    font-family: 'Roboto',sans-serif; /* Body */
+    font-size: 18px; 
+    line-height: 28px; 
+    font-weight: 400; 
+    color: #9095A0FF; /* neutral-500 */
+}
+.faq_list{
+    margin-top: 10px;
+}
+.faq_item{
+    border-bottom: 1px solid#ddd;
+}
+.faq_question{
+    text-transform: capitalize;
+    top: 280px; 
+  left: 132px; 
+  width: 1108px; 
+  height: 30px; 
+  font-family: 'Roboto',sans-serif; /* Body */
+  font-size: 20px; 
+  line-height: 30px; 
+  font-weight: 700; 
+  color: #171A1FFF; /* neutral-900 */
+}
+.faq_answer{
+    text-transform: capitalize;
+    top: 317px; 
+    left: 132px; 
+    width: 1112px; 
+    height: 52px; 
+    font-family: 'Roboto' sans-serif; /* Body */
+    font-size: 16px; 
+    line-height: 26px; 
+    font-weight: 400; 
+    color: #323842FF; /* neutral-700 */
+}
+
+@media (min-width: 320px) and (max-width: 678px){
+    .faq h1{
+        font-size: 2.5rem;
+        max-width: 1000%;
+    }
+    .faq p{
+        font-size: 1.6rem;
+        margin-top: 5rem;
+    }
+    .faq_question{
+        margin-top: 6rem;
+        font-size: 1.5rem;
+        max-width: 90%;
+    }
+    .faq_answer{
+        margin-top: 4rem;
+        max-width: 100%;
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+    .faq h1{
+        font-size: 3rem;
+        max-width: 1000%;
+    }
+    .faq p{
+        font-size: 2.4rem;
+        line-height: 1.2;
+        margin-top: 2rem;
+    }
+    .faq_question{
+        margin-top: 6rem;
+        font-size: 2rem;
+        max-width: 90%;
+    }
+    .faq_answer{
+        margin-top: 4rem;
+        max-width: 100%;
+        font-size: 2.2rem;
+        line-height: 1.2;
+    }
+}

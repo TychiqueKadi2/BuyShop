@@ -1,0 +1,193 @@
+.sellNavbar{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.sellNavbar input{
+    padding: 8px;
+    border-radius: 4px;
+
+}
+.menu_icones{
+    display: none;
+}
+.logo_namese{
+    margin-left: 3.8rem;
+    margin-top: -3rem;
+    font-size: 1.6rem;
+    text-decoration: none;
+    outline: none;
+    list-style: none;
+    font-weight: bold;
+
+}
+.logo_namese h1 Link{
+    list-style: none;
+    outline: none;
+    text-decoration: none;
+}
+.li_nav{
+    font-family: "roboto", sans-serif;
+    position: absolute; 
+    gap: 2rem;
+    top: 2px; 
+    left: 211px; 
+    width: 488px; 
+    height: 52px; 
+    display: flex; 
+    align-items: center; 
+    font-size: 14px; 
+    line-height: 22px; 
+    font-weight: 400; 
+    opacity: 1; 
+}
+img{
+    margin-top: -1.3rem;
+    margin-left: 3rem;
+}
+.li_nav a{
+    padding: 15px 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #565E6CFF; /* neutral-600 */
+    border-radius: 6px; /* border-m */
+    cursor: pointer; 
+    white-space: nowrap; 
+    text-decoration: none;
+}
+.li_nav a:hover{
+    color: orange;
+}
+.active{
+    position: relative;
+    font-weight: bold;
+    color: orange;
+}
+.bix_4{
+    display: none;
+}
+.active::after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: orange;
+    position: absolute;
+    bottom: 6px;
+    left: 0;
+}
+.image_pro img{
+    margin-top: -1.3rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 66rem;
+}
+@media (min-width: 320px) and (max-width: 678px){
+    .li_nav{
+        width: 50%;
+        height: 390px;
+        flex-direction: column;
+        margin-left: -2rem;
+        margin-top: 2rem;
+        background-color: rgba(255, 255, 255, 0.521);
+        backdrop-filter: blur(5px);
+        box-shadow: 4px 2px 10px #000000cb;
+        z-index: 2;
+        
+    }
+    .li_nav a{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.6rem;
+        margin-top: 3rem;
+       }
+    
+       .li_nav.active{
+        display: none;
+       }
+    .image_pro{
+        position: absolute;
+        margin-left: -54rem;
+        margin-top: 1.8rem;
+    }
+    .image_pro img{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .humberg_4{
+        display: block;
+        margin-left: -2rem;
+        margin-top: 0.1rem;
+        font-size: 3rem;
+        color: orange;
+    }
+    .bix_4{
+        margin-left: -2rem;
+        margin-top: -1.5rem;
+        font-size: 3rem;
+        color: orange;
+        display: block;
+        z-index: 20;
+    }
+    .menu_icones{
+        display: block;
+        z-index: 20;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+    .li_nav{
+        width: 50%;
+        height: 400px;
+        justify-content: center;
+        margin-top: 6rem;
+        font-size: 2rem;
+        margin-left: 8rem;
+        flex-direction: column;
+        background-color: rgba(255, 255, 255, 0.521);
+        backdrop-filter: blur(5px);
+        box-shadow: 4px 2px 10px #000000cb;
+    }
+   
+     .image_pro{
+        display: block;
+        position: absolute;
+        margin-left: -32rem;
+        margin-top: 0.3rem;
+    }
+    .image_pro img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 1rem;
+
+    }
+    .humberg_4{
+        margin-left: -1rem;
+        margin-top: 1rem;
+        font-size: 4.3rem;
+        color: orange;
+        display: block;
+    }
+    .logo_namese{
+        font-size: 2.2rem;
+    }
+    .bix_4{
+        margin-left: -5rem;
+        margin-top: 1rem;
+        font-size: 4rem;
+        color: orange;
+        display: block;
+    }
+    .li_nav.active{
+        display: none;
+    }
+}

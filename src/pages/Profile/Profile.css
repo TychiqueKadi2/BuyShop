@@ -1,0 +1,131 @@
+.profile_container{
+    font-family: 'roboto',sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+h1, h2{
+    text-align: center;
+    font-family: 'Montserrat',sans-serif;
+}
+.info{
+    text-align: center;
+}
+.info, .payment_list{
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+.payment_list li{
+    list-style: none;
+    padding: 15px 0;
+    text-align: center;
+}
+.edit_form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.profile_image{
+
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+.edit_form input{
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.flex_group{
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+.flex_group input{
+    flex: 1;
+}
+.method{
+    width: 100%; 
+    height: 48px; 
+    border: 1px solid #ddd;
+    outline: none;
+}
+button{
+    background: orange;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:hover{
+    background: darkorange;
+}
+
+@media (min-width: 320px) and (max-width: 678px){
+    .info p{
+        font-size: 1.6rem;
+        line-height: 1.2;
+    }
+    h2{
+        font-size: 2rem;
+    }
+    .payment_list li{
+        font-size: 1.5rem;
+    }
+    .edit_form h3{
+        font-size: 1.5rem;
+    }
+    .edit_form select {
+        font-size: 1.2rem;
+    }
+    .flex_group input{
+        font-size: 1.2rem;
+    }
+    .edit_form input{
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .info p{
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    .profile_container h1{
+        font-size: 3rem;
+    }
+    h2{
+        font-size: 2rem;
+    }
+    .payment_list li{
+        font-size: 2rem;
+    }
+    .edit_form h3{
+        font-size: 2rem;
+    }
+    .edit_form select {
+        font-size: 1.7rem;
+    }
+    .edit_form option{
+        font-size: 1rem;
+    }
+    .flex_group input{
+        font-size: 2rem;
+    }
+    .edit_form input{
+        font-size: 1.7rem;
+    }
+    button{
+        font-size: 2.1rem;
+    }
+}

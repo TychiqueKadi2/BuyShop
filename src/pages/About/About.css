@@ -1,0 +1,189 @@
+.about{
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+
+}
+.aboutSection{
+    display: flex;
+}
+.textContent_3{
+    color: #8b8a8a;
+    
+}
+.textContent_1{
+    margin-left: -34rem;
+    font-family: 'roboto',sans-serif;
+    font-weight: bolder;
+}
+.values{
+    margin-left: 6rem;
+    margin-top: 3rem;
+    max-width: 50%;
+
+}
+.values h2{
+    margin-left: -34rem;
+    font-family: 'roboto',sans-serif;
+}
+.values .custom{
+    margin-left: -31rem;
+}
+.values p{
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #8b8a8a;
+    font-family: 'roboto',sans-serif;
+    font-weight: 300;
+}
+.aboutImage{
+    max-width: 30%;
+    max-height: 80%;
+    margin-top: 4rem;
+    margin-left: 6rem;
+    border-radius: 6px;
+}
+.features{
+  text-align: center;
+  padding: 40px;
+}
+.features h2{
+    font-size: 2.5rem;
+    font-family: 'roboto',sans-serif;
+}
+.worksection{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;                                       
+}
+.block{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-family: 'roboto',sans-serif;
+    font-size: 1rem;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+.howIcon{
+    font-size: 40px;
+    color: orange;
+    margin-bottom: 10px;
+}
+.block h3{
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+.block p{
+    font-size: 1.1rem;
+    color: #8b8a8a;
+}
+
+@media (min-width: 320px) and (max-width: 678px){
+    .about{
+        width: 100%;
+        object-fit: contain;
+    }
+    .aboutSection{
+        flex-direction: column;
+        text-align: center;
+    }
+    .textContent_1{
+        text-align: center;
+        margin-left: 1rem;
+    }
+    .textContent_3{
+        text-align: center;
+        margin: 0;
+        
+    }
+    .values .custom{
+        margin-left: -1rem;
+    }
+    .values h2{
+        margin-left: 1rem;
+        font-size: 1.8rem;
+    }
+    .values p{
+        font-size: 1.3rem;
+    }
+    .values{
+        text-align: center;
+        margin: 0;
+        max-width: 100%;
+    }
+    .aboutImage{
+        max-width: 70%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-left: 3rem;
+
+    }
+    .block h3{
+        font-size: 1.8rem;
+    }
+    .block p{
+        font-size: 1.4rem;
+    }
+    .features h2{
+        font-size: 1.9rem;
+        font-weight: bold;
+    }
+    .features{
+        flex-direction: column;
+        text-align: center;
+        margin-left: -2rem;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+    .aboutSection{
+        text-align: center;
+        flex-direction: column;
+    }
+    .values{
+        text-align: center;
+        margin: 0;
+        max-width: 100%;
+    }
+    .values h2{
+        margin-left: 1rem;
+        font-size: 2.7rem;
+    }
+    .values p{
+        font-size: 1.7rem;
+    }
+    .values .custom{
+        margin-left: 1rem;
+    }
+    .aboutImage{
+        max-width: 60%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        margin-left: 9rem;
+        border-radius: 10px;
+    }
+    .textContent_3{
+        font-size: 1.8rem;
+    }
+    .textContent_1{
+        font-size: 3rem;
+        margin-left: 1rem;
+    }
+    .block h3{
+        font-size: 2rem;
+    }
+    .block p{
+        font-size: 1.7rem;
+    }
+    .features h2{
+        font-size: 1.9rem;
+        font-weight: bold;
+    }
+    .howIcon{
+        font-size: 5rem;
+    }
+}

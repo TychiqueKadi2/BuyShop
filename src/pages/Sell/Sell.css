@@ -1,0 +1,157 @@
+.sellItem{
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 40px;
+    border-radius: 10px;
+    font-family: 'roboto',sans-serif;
+}
+.sellItem h2{
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: bolder;
+    font-size: 2.5rem;
+}
+.uploadSection input{
+    display: block;
+    margin: 10px auto;
+}
+.uploadSection label{
+    text-transform: capitalize;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.previeImage{
+    width: 100px;
+    height: auto;
+    margin-top: 10px;
+}
+.itemDetails{
+    margin-top: 20px;
+}
+.itemDetails label{
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    font-size: 1.4rem;
+}
+.itemDetails textarea{
+    width: 600px; 
+    height: 100px; 
+    padding-top: 7px; 
+    padding-bottom: 7px; 
+    padding-left: 12px; 
+    padding-right: 12px; 
+    font-family: Roboto; 
+    font-size: 14px; 
+    line-height: 22px; 
+    font-weight: 400; 
+    color: #BCC1CAFF; /* neutral-400 */
+    border-radius: 6px; /* border-m */
+    border-width: 1px; 
+    border-color: #BCC1CAFF; /* neutral-400 */
+    border-style: solid; 
+}
+.itemDetails  select{
+    
+   padding: 20px;
+    font-family: Roboto; 
+    font-size: 18px; 
+    line-height: 28px; 
+    font-weight: 400; 
+    background: #00000000; /* transparent */
+    border-radius: 6px; /* border-m */
+    border-width: 1px; 
+    border-color: #BCC1CAFF; /* neutral-400 */
+    border-style: solid; 
+    outline: none; 
+    width: 100%;
+  }
+ 
+.itemDetails input{
+    width: 600px; 
+    height: 52px; 
+    padding-left: 20px; 
+    padding-right: 20px; 
+    font-family: Roboto; 
+    font-size: 18px; 
+    line-height: 28px; 
+    font-weight: 400; 
+    background: #00000000; /* transparent */
+    border-radius: 6px; /* border-m */
+    border-width: 1px; 
+    border-color: #BCC1CAFF; /* neutral-400 */
+    border-style: solid; 
+    outline: none; 
+  }
+
+@media (min-width: 320px) and (max-width: 678px){
+    .sellItem{
+        max-width: 300px;
+        align-items: center;
+        justify-content: center;
+        margin-left: -1rem;
+    }
+    .sellItem h2{
+        font-size: 2rem;
+    }
+    .uploadSection label{
+        font-size: 2rem;
+        text-transform: capitalize;
+    }
+    .itemDetails label{
+        font-size: 1.6rem;
+    }
+    .itemDetails textarea{
+        font-size: 1.2rem;
+        max-width: 90%;
+    }
+    .itemDetails select{
+        width: 100%;
+        padding: 20px;
+    }
+    .itemDetails input{
+        max-width: 90%;
+    }
+  
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+    .sellItem{
+        max-width: 600px;
+        align-items: center;
+        justify-content: center;
+        margin-left: 2rem;
+    }
+    .sellItem h2{
+        font-size: 2.8rem;
+    }
+    .uploadSection label{
+        font-size: 2.8rem;
+        text-transform: capitalize;
+    }
+    .uploadSection input{
+        max-width: 1000%;
+        display: block;
+        margin: 30px auto;
+        padding: 30px;
+        font-size: 2rem;
+    }
+    .itemDetails label{
+        font-size: 3rem;
+    }
+    .itemDetails textarea{
+        font-size: 2rem;
+        max-width: 90%;
+    }
+    .itemDetails select{
+        width: 100%;
+        font-size: 2rem;
+        padding: 40px;
+    }
+    .itemDetails input{
+        max-width: 90%;
+        font-size: 2rem;
+        padding: 30px;
+    }
+}
+

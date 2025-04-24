@@ -1,0 +1,145 @@
+.hero{
+    position: absolute; 
+    top: 120px; 
+    left: 179px; 
+    width: 1082px; 
+    height: 536px; 
+    background: #FF8C0000; 
+    border-radius: 0px; 
+}
+.text h1{
+   text-align: center;
+    color: #FF5722FF; 
+    font-family: "motserrat", sans-serif;
+    font-size: 3.5rem;  
+  }
+.hero_buttons{
+  text-decoration: none;
+  list-style: none;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  gap: 20px;
+}
+.buttons_s,
+.buttons_b{
+  text-decoration: none;
+  top: 100px; 
+  left: 0px; 
+  width: 150px; 
+  height: 36px; 
+  padding: 0 12px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-family: Roboto; 
+  font-size: 14px; 
+  line-height: 22px; 
+  font-weight: 400; 
+  color: #FFFFFFFF; /* white */
+  background: #FF8C00FF; 
+  opacity: 1; 
+  border: none; 
+  list-style: none;
+  border-radius: 10px;
+}
+.buttons_b a{
+  text-decoration: none;
+  outline: none;
+  list-style: none;
+  initial-letter: none;
+
+}
+.Link{
+  text-decoration: none;
+}
+.content{
+  position: absolute; 
+  top: 236px;
+  align-items: center;
+  justify-content: center; 
+  font-family: "Roboto", sans-serif; /* Body */
+  font-size: 20px; 
+  line-height: 22px; 
+  font-weight: 400; 
+  color: #FF8C00FF;
+}
+@media (min-width: 320px) and (max-width: 678px) {
+  .hero{
+    max-width: 400px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  .text h1{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    margin-left: -24rem;
+    font-weight: bold;
+  }
+  .text p{
+    margin-top: -6rem;
+  }
+  .hero_buttons{
+    
+    object-fit: cover;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: -24rem;
+  }
+  .buttons_b,.buttons_s{
+    font-size: 1.6rem;
+  }
+  .content{
+    position: absolute;
+    margin-top: -5rem;
+    margin-left: -11rem;
+    max-width: 90%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero{
+    max-width: 900px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  .text h1{
+    margin-top: 1.8rem;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.5rem;
+    margin-left: -32rem;
+    font-weight: bold;
+  }
+  .text p{
+    margin-top: -2.3rem;
+  }
+  .hero_buttons{
+    object-fit: cover;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: -30rem;
+  }
+  .content{
+    font-size: 2.2rem;
+    line-height: 1.2;
+    position: absolute;
+    margin-top: -1rem;
+    margin-left: -10rem;
+    max-width: 80%;
+  }
+  .buttons_s,
+.buttons_b{
+  max-width: 100%;
+  padding: 30px 160px; 
+  margin-top: -1rem;
+  font-size: 2rem;
+}
+}

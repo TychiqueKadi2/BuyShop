@@ -1,0 +1,35 @@
+.searchContainer{
+    margin-left: 1100px;
+    display: flex;
+    align-items: center;
+    border: none;
+    background: #ccc;
+    border-radius: 5px;
+    padding: 30px;
+    margin-top: -10px;
+    width: 20%;
+    height: 25px;
+    max-width: 800px;
+
+
+}
+.search{
+    font-size: 18px;
+    color: gray;
+    margin-right: 10px;
+    border: none;
+}
+
+input{
+    background: #ccc;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+}
+@media (min-width: 320px) and (max-width: 678px){
+    .searchContainer{
+        display: none;
+    }
+  
+}

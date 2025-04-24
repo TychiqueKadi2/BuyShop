@@ -1,0 +1,146 @@
+.banner{
+    margin-bottom: 60px; 
+    margin-top: 120px;
+  width: 1176px;
+  margin-left: 8rem;
+  height: 274px; 
+  background: #FFEBD2FF; /* primary-150 */
+  border-radius: 16px; /* border-xl */
+}
+.bannerContent{
+    flex: 1;
+}
+.bannerImage{
+    margin-top: -13.1rem;
+    margin-left: 40rem; 
+    width: 500px; 
+    height: 270px; 
+    border-radius: 16px 16px 16px 16px; /* border-tr-none border-br-none */
+}
+.free_contents{
+    margin-top: 4rem;
+    margin-left: -23rem;
+    font-size: 2.5rem;
+    text-transform: capitalize;
+    font-family: "roboto",sans-serif;
+    font-weight: bold;
+}
+.bannerTitle{
+    position: relative;
+    top: 2rem;
+    margin-left: 8rem; 
+    width: 448px; 
+    font-family: Roboto; /* Body */
+    font-size: 20px; 
+
+    font-weight: 400; 
+    color: #171A1FFF; /* neutral-900 */
+}
+.bannerButton{
+    top: 190px; 
+  margin-left: 14rem;
+  height: 52px; 
+  padding: 0 20px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-family: Roboto; 
+  font-size: 18px; 
+  line-height: 28px; 
+  font-weight: 400; 
+  color: #FFFFFFFF; /* white */
+  background: #FF8C00FF; /* primary-500 */
+  opacity: 1; 
+  border: none; 
+  border-radius: 6px; /* border-m */
+  gap: 8px; 
+}
+.button .icon {
+  width: 24px; 
+  height: 24px; 
+  fill: #FFFFFFFF; /* white */
+}
+/* Hover */
+.button:hover {
+  color: #FFFFFFFF; /* white */
+  background: #E47D00FF; /* primary-550 */
+}
+/* Pressed */
+.button:hover:active {
+  color: #FFFFFFFF; /* white */
+  background: #C96F00FF; /* primary-600 */
+}
+/* Disabled */
+.button:disabled {
+  opacity: 0.4; 
+}
+
+.cartBtn{
+    font-size: 1.2rem;
+    text-align: center;
+    justify-content: center;
+
+}
+@media (min-width: 320px) and (max-width: 678px) {
+  .banner{
+    margin-left: -1rem;
+    
+  }
+  .bannerTitle{
+    max-width: 150px;
+    margin-left: 2rem;
+    font-size: 1.3rem;
+  }
+  .free_contents{
+    width: 40px;
+    font-size: 1.8rem;
+    margin-left: 2.8rem;
+  }
+  .bannerButton{
+    margin-left: 2rem;
+    width: 12%;
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+  .bannerImage{
+    margin-left: 13.3rem;
+    max-width: 15%;
+    margin-top: -15.7rem;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .banner{
+    margin-left: 1rem;
+    max-width: 95%;
+    
+    
+  }
+  .bannerTitle{
+    max-width: 260px;
+    margin-left: 1rem;
+    font-size: 1.7rem;
+  }
+  .free_contents{
+    margin-top: 3rem;
+    width: 80px;
+    font-size: 1.9rem;
+    margin-left: 4rem;
+  }
+  .bannerButton{
+    margin-left: 4rem;
+    width: 28%;
+    font-size: 1.8rem;
+    padding: 0 10px;
+  }
+  .bannerImage{
+    margin-left: 25rem;
+    max-width: 40%;
+    margin-top: -15.7rem;
+  }
+  .cartBtn{
+    font-size: 2rem;
+    width: 34px; 
+    height: 24px; 
+    fill: #FFFFFFFF; /* white */
+  }
+}
