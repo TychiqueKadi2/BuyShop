@@ -41,8 +41,8 @@ cloudinary.config(
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 CLOUDINARY_NAME = config('CLOUDINARY_CLOUD_NAME')
 MEDIA_URL = f'https://res.cloudinary.com/{CLOUDINARY_NAME}/'
-ALLOWED_HOSTS = ['localhost']
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ['localhost', 'buyshop.onrender.com']
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost',
