@@ -1,12 +1,17 @@
 POST http://localhost:8000/auth/signup/seller/
 Content-Type: application/json
 
-{
-    "email": "lekan4jesu@gmail.com",
-    "password": "seller123"
-}
-
 # {
 #     "email": "lekanmojibola@gmail.com",
 #     "password": "oladev123"
 # }
+
+# {
+#     "email": "oladev123@gmail.com",
+#     "password": "seller123"
+# }
+
+{
+    "email": "lekan4jesu@gmail.com",
+    "password": "seller123"
+}

@@ -25,15 +25,51 @@ from .serializers import (
     BuyerProfileSerializer,
     SellerSignupSerializer,
     SellerLoginSerializer,
-    KYCUpdateSerializer
+    BuyerKYCUpdateSerializer,
+    SellerKYCUpdateSerializer,
 )
-from .utils import generate_otp, send_password_reset_otp_email, send_verification_otp_email 
+from .utils import generate_otp, send_password_reset_otp_email, send_verification_otp_email, IsBuyer, IsSeller 
 
 logger = logging.getLogger(__name__)
 
 class SwitchRoleAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
+    @swagger_auto_schema(
+        operation_summary="Switch user role",
+        operation_description="Allows an authenticated user to switch between 'buyer' and 'seller' roles. Issues a new access and refresh token with the updated role.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['new_role'],
+            properties={
+                'new_role': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="The new role to switch to. Must be either 'buyer' or 'seller'.",
+                    enum=['buyer', 'seller']
+                )
+            },
+        ),
+        responses={
+            200: openapi.Response(
+                description="Role switched successfully",
+                examples={
+                    "application/json": {
+                        "message": "Role switched to seller",
+                        "access_token": "jwt-access-token",
+                        "refresh_token": "jwt-refresh-token"
+                    }
+                }
+            ),
+            400: openapi.Response(
+                description="Invalid role",
+                examples={
+                    "application/json": {
+                        "error": "Invalid role"
+                    }
+                }
+            ),
+        }
+    )
     def post(self, request):
         user = request.user
         new_role = request.data.get('new_role')  # The new role (either 'buyer' or 'seller')
@@ -43,7 +79,7 @@ class SwitchRoleAPIView(APIView):
             return Response({"error": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
         
         # If the user is already the requested role, no need to switch
-        if request.COOKIES.get('user_type') == new_role:
+        if getattr(request.user, 'user_type', None) == new_role:
             return Response({"message": f"You are already a {new_role}"}, status=status.HTTP_200_OK)
         
         # Issue a new JWT token with the updated role (new_role)
@@ -56,7 +92,8 @@ class SwitchRoleAPIView(APIView):
             'access_token': str(access_token),
             'refresh_token': str(refresh)
         }, status=status.HTTP_200_OK)
-
+        request.user.user_type = new_role
+        request.user.save()
         response.set_cookie(
             key='user_type',
             value=new_role,
@@ -396,7 +433,7 @@ class LogoutView(APIView):
     """
     Endpoint to logout an authenticated user (buyer or seller) by blacklisting the refresh token.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -419,7 +456,8 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error blacklisting token: {e}")
             return Response({"error": "Invalid token or already blacklisted."}, status=status.HTTP_400_BAD_REQUEST)
 
 # class ChangePasswordView(APIView):
@@ -507,6 +545,7 @@ class ResendVerificationCodeView(APIView):
     Common endpoint to resend the verification OTP code for email verification
     for both client buyers and sellers. Expects 'email' in the request.
     """
+    permission_classes = []
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -522,7 +561,9 @@ class ResendVerificationCodeView(APIView):
         }
     )
     def post(self, request):
-        email = request.data.get("email")
+        serializer = ResendOTPSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
         if not email:
             return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -545,69 +586,62 @@ class ResendVerificationCodeView(APIView):
 # KYC Update Endpoint
 ###############################################################################
 
-token_param = openapi.Parameter(
-    'Authorization', openapi.IN_HEADER,
-    description="Bearer token for authentication",
-    type=openapi.TYPE_STRING,
-    required=True
-)
-first_name_param = openapi.Parameter(
-    'first_name', openapi.IN_FORM,
-    description="First name",
-    type=openapi.TYPE_STRING,
-    required=True
-)
-last_name_param = openapi.Parameter(
-    'last_name', openapi.IN_FORM,
-    description="Last name",
-    type=openapi.TYPE_STRING,
-    required=True
-)
-physical_address_param = openapi.Parameter(
-    'physical_address', openapi.IN_FORM,
-    description="Physical address",
-    type=openapi.TYPE_STRING,
-    required=True
-)
-phone_number_param = openapi.Parameter(
-    'phone_number', openapi.IN_FORM,
-    description="Phone number",
-    type=openapi.TYPE_STRING,
-    required=True
-)
-profile_pic_param = openapi.Parameter(
-    'profile_pic', openapi.IN_FORM,
-    description="Profile picture file upload",
-    type=openapi.TYPE_FILE,
-    required=False
-)
 
-class KYCUpdateView(generics.UpdateAPIView):
+class BuyerKYCUpdateView(generics.UpdateAPIView):
     """
     Endpoint for updating KYC details for the authenticated client user.
     Allows updating first name, last name, physical address, phone number, and profile picture.
     """
     queryset = Buyer.objects.all()
-    serializer_class = KYCUpdateSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
+    serializer_class = BuyerKYCUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
 
     def get_object(self):
         return self.request.user
-
+    
     @swagger_auto_schema(
-        operation_description="Update KYC details for the authenticated user.",
-        manual_parameters=[token_param, first_name_param, last_name_param, physical_address_param, phone_number_param, profile_pic_param],
-        consumes=['multipart/form-data'],
+        operation_description="Update KYC details for the authenticated buyer.",
+        request_body=BuyerKYCUpdateSerializer,
         responses={
-            200: "KYC update successful.",
-            400: "Invalid input data.",
-            401: "Unauthorized."
+            200: openapi.Response(
+                description="KYC updated successfully",
+                examples={
+                    "application/json": {"message": "KYC updated successfully."}
+                }
+            ),
+            400: "Bad Request",
+            401: "Unauthorized"
         }
     )
-    def patch(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "KYC update successful."}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response({"message": "KYC updated successfully."}, status=status.HTTP_200_OK)
+
+
+class SellerKYCUpdateView(generics.UpdateAPIView):
+    queryset = Seller.objects.all()
+    serializer_class = SellerKYCUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated, IsSeller]
+
+    def get_object(self):
+        return self.request.user 
+
+    @swagger_auto_schema(
+        operation_description="Update KYC details for the authenticated seller.",
+        request_body=SellerKYCUpdateSerializer,
+        responses={
+            200: openapi.Response(
+                description="KYC updated successfully",
+                examples={
+                    "application/json": {"message": "KYC updated successfully."}
+                }
+            ),
+            400: "Bad Request",
+            401: "Unauthorized"
+        }
+    )
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response({"message": "KYC updated successfully."}, status=status.HTTP_200_OK)
+

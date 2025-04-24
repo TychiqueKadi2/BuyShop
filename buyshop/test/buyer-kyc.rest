@@ -1,0 +1,17 @@
+### Update Buyer KYC
+PUT http://localhost:8000/auth/buyer/kyc/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDk3MDYxLCJpYXQiOjE3NDU0OTM0NjEsImp0aSI6ImFhMjQ0NjBmMTU3NDQ0ODc4MzU1YjYzYjQyNDQwNDMzIiwidXNlcl9pZCI6IjhjNjNhZmNjLTdlM2EtNGIzZS05OWZmLTU0OTZhODA4OWFlZiJ9.bcO56yZMv9C0UMy9piwTudaDPlPsOX8LjbDsjU8Ci_A
+
+{
+  "first_name": "Mojibola",
+  "last_name": "Olalekan",
+  "phone_number": "+2349067914516",
+  "address": {
+    "street": "123 Example Street",
+    "city": "Osogbo",
+    "state": "Osun",
+    "country": "Nigeria",
+    "label": "Home"
+  }
+}

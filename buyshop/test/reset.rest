@@ -1,0 +1,8 @@
+post http://localhost:8000/auth/reset-password/user/
+content-type: application/json
+
+{
+  "email": "lekanmojibola@gmail.com",
+  "new_password": "olami123",
+  "otp": "3253"
+}
