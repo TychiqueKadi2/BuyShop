@@ -5,8 +5,10 @@ from django.utils import timezone
 import uuid
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
+from django.db.models import Sum, Count
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 ###############################################################################
@@ -46,11 +48,10 @@ class AbstractCustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     phone_number = PhoneNumberField(blank=True, null=True)
-    home_address = models.TextField(blank=True, null=True)
     is_staff = models.BooleanField(default=False)
+    address = GenericRelation('Address', content_type_field='user_type', object_id_field='object_id',)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = BaseCustomUserManager()
@@ -63,10 +64,12 @@ class Buyer(AbstractCustomUser):
     """
         Buyer model that extends the abstract custom user with client-specific fields.
     """
+    is_verified_buyer = models.BooleanField(default=False)
+    user_type = models.CharField(max_length=10, default='buyer')
 
 
 ###############################################################################
-# Driver Model (updated for optional KYC fields)
+# Seller Model (updated for optional KYC fields)
 ###############################################################################
 class Seller(AbstractCustomUser):
     """
@@ -77,20 +80,21 @@ class Seller(AbstractCustomUser):
     earnings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     rating_count = models.PositiveIntegerField(default=0)
-    bank_account_number = models.CharField(max_length=50, blank=True, null=True)
     bank_name = models.CharField(max_length=100, blank=True, null=True)
+    account_name = models.CharField(max_length=100, blank=True, null=True)
+    account_number = models.CharField(max_length=20, blank=True, null=True)
     total_revenue = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    # Method to update the average rating
+    is_verified_seller = models.BooleanField(default=False)
+    user_type = models.CharField(max_length=10, default='seller')
 
     def update_rating(self):
-        ratings = self.ratings_received.all()
-        count = ratings.count()
+        result = self.ratings.aggregate(total_value=Sum('rating'), total_count=Count('id'))
         
-        if count > 0:
-            total = sum(rating.value for rating in ratings)
-            self.average_rating = total / count
-            self.rating_count = count
-            self.save()
+        # Check if there are any ratings
+        if result['total_count'] > 0:
+            self.average_rating = result['total_value'] / result['total_count']
+            self.rating_count = result['total_count']
+        self.save()
 
 
 ###############################################################################
@@ -125,21 +129,21 @@ class OTP(models.Model):
         return self.created_at < expiration_time
 
 
-class Rating(models.Model):
-    buyer = models.ForeignKey('Buyer', on_delete=models.CASCADE, related_name='ratings_given')
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE, related_name='ratings_received')
-    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    comment = models.TextField(blank=True, null=True)
+class Address(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    # These two fields define the generic relation
+    user_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.UUIDField()
+    user = GenericForeignKey('user_type', 'object_id')
+
+    street = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, default='South Africa')
+    label = models.CharField(max_length=50, blank=True, default='Home')
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        unique_together = ('buyer', 'seller')
+    updated_at = models.DateTimeField(auto_now=True)
 
-
-@receiver(post_save, sender=Rating)
-def update_seller_rating_on_save(sender, instance, **kwargs):
-    instance.seller.update_rating()
-
-@receiver(post_delete, sender=Rating)
-def update_seller_rating_on_delete(sender, instance, **kwargs):
-    instance.seller.update_rating()
+    def __str__(self):
+        return f"{self.label} - {self.street}, {self.city}"

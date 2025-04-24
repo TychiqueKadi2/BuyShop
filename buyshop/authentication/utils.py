@@ -5,6 +5,8 @@ from datetime import timedelta
 from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.timezone import now
+from rest_framework.permissions import BasePermission
+
 
 # Default OTP validity in minutes; we set it to 60 (1 hour)
 DEFAULT_OTP_VALIDITY_MINUTES = getattr(settings, 'OTP_VALIDITY_MINUTES', 60)
@@ -88,3 +90,15 @@ def is_otp_valid(otp_obj, provided_otp, validity_duration=timedelta(minutes=DEFA
     :return: True if the OTP is correct and not expired, False otherwise.
     """
     return otp_obj.code == provided_otp and (now() - otp_obj.created_at) <= validity_duration
+
+
+class IsBuyer(BasePermission):
+    """
+    Custom permission to only allow buyers to access the view.
+    """
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'buyer'
+
+class IsSeller(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'seller'

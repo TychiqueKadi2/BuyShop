@@ -1,0 +1,6 @@
+post http://localhost:8000/auth/logout/
+content-type: application/json
+
+{
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTQyNTE2NiwiaWF0IjoxNzQ1MzM4NzY2LCJqdGkiOiI1ZjE1NDI5YzMxMDQ0NDlmODgxZDE5MjVhNDk1YmJkYSIsInVzZXJfaWQiOiJkNWVlZWE3Zi01YjZlLTRmMzEtOGMzNS1iYjM0MWEyZmRmMWQifQ.grZTjNmW24NnK1FWGK3DCMs4pNl-Bpnh_oWynLHO79I"
+}

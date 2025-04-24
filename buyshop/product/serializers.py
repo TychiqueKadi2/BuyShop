@@ -7,7 +7,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = ProductImage
-        fields = ['id', 'image', 'created_at', 'updated_at']
+        fields = ['id', 'image']
 
 class CategorySerializer(serializers.ModelSerializer):
     """
@@ -15,10 +15,14 @@ class CategorySerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Category
-        fields = ['id', 'name',  'created_at', 'updated_at']
+        fields = ['id', 'name']
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
+    city = serializers.CharField(
+        max_length=255,
+        required=True,
+        help_text="City where the product is located")
     new_images = serializers.ListField(
         child=serializers.ImageField(),
         write_only=True,
@@ -48,12 +52,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'is_available',
             'categories',  # write-only
             'category_details',  # read-only
-            'created_at',
-            'updated_at',
             'images',
             'new_images',
+            'city',
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'images', 'category_details']
+        read_only_fields = ['id', 'images', 'category_details']
 
     def create(self, validated_data):
         category_names = validated_data.pop('categories', [])

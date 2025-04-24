@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Product</title>
+</head>
+<body>
+  <h2>Update Product Image</h2>
+
+  <form id="updateForm">
+    <label for="productId">Product ID (UUID):</label><br />
+    <input type="text" id="productId" name="productId" required><br><br>
+
+    <label for="images">Select new image(s):</label><br />
+    <input type="file" id="images" name="new_images" accept="image/*" multiple required><br><br>
+
+    <button type="submit">Update Product</button>
+  </form>
+
+  <p id="responseMessage"></p>
+
+  <script>
+    const form = document.getElementById('updateForm');
+    const responseMsg = document.getElementById('responseMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const productId = document.getElementById('productId').value;
+      const imageFiles = document.getElementById('images').files;
+
+      const formData = new FormData();
+      for (let i = 0; i < imageFiles.length; i++) {
+        formData.append('new_images', imageFiles[i]);
+      }
+
+      try {
+        const response = await fetch(`http://localhost:8000/product/update/${productId}/`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTAxODE1LCJpYXQiOjE3NDU0OTgyMTUsImp0aSI6ImI4ZjVlNGIwMTExYjQwY2Q5OTllZmQ1OGJhMmUzYTAxIiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.njO180Cw5dEcZ7JW7dgff3Iz1PHq0DA0Go6VilkKGsI'
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          responseMsg.innerText = '✅ ' + data.message;
+        } else {
+          responseMsg.innerText = '❌ Error: ' + JSON.stringify(data);
+        }
+      } catch (error) {
+        responseMsg.innerText = '❌ Request failed: ' + error;
+      }
+    });
+  </script>
+</body>
+</html>

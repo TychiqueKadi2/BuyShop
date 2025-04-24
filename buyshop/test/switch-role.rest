@@ -1,0 +1,7 @@
+post http://localhost:8000/auth/switch-role/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDk2OTA4LCJpYXQiOjE3NDU0OTMzMDgsImp0aSI6IjdlOWNmY2Q1ZDExMTQ0MTFiZDhmNzZiYjE4Y2M0Yjc2IiwidXNlcl9pZCI6ImI2MGY5YTU4LTM1ZDktNDJiZi05NDY3LTNjMDY5MTQyMTdjYyJ9.X_oZnisGI-6fWvrKLs38RkqM5Dx5-3mGR2gHbxfZCjc
+
+{
+    "new_role": "seller"
+}

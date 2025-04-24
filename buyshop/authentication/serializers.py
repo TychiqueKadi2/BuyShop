@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from phonenumber_field.serializerfields import PhoneNumberField
-from .models import Buyer, Seller
+from .models import Buyer, Seller, Address
+from django.contrib.contenttypes.models import ContentType
+
 
 ###############################################################################
 # Base Serializers
@@ -94,38 +96,6 @@ class BuyerProfileSerializer(serializers.ModelSerializer):
         fields = ('email', 'first_name', 'last_name', 'physical_address', 'phone_number')
         read_only_fields = ('email',)
 
-class KYCUpdateSerializer(serializers.ModelSerializer):
-    """
-    Serializer for updating KYC details for a user.
-    Validates first name, last name, physical address, phone number, and profile picture.
-    """
-    phone_number = PhoneNumberField(required=True)
-
-    class Meta:
-        model = Buyer
-        fields = ['first_name', 'last_name', 'physical_address', 'phone_number']
-
-    def validate_first_name(self, value):
-        if not value.isalpha():
-            raise serializers.ValidationError("First name must contain only alphabetic characters.")
-        return value
-
-    def validate_last_name(self, value):
-        if not value.isalpha():
-            raise serializers.ValidationError("Last name must contain only alphabetic characters.")
-        return value
-
-    def validate_physical_address(self, value):
-        if not value.strip():
-            raise serializers.ValidationError("Physical address cannot be empty.")
-        return value
-
-    def validate_phone_number(self, value):
-        if len(str(value)) < 10 or len(str(value)) > 15:
-            raise serializers.ValidationError("Phone number must be between 10 and 15 digits.")
-        return value
-
-
 class SellerSignupSerializer(BaseSignupSerializer):
     """
     Serializer for Seller signup.
@@ -166,4 +136,87 @@ class ResendOTPSerializer(serializers.Serializer):
     Only requires the user's email.
     """
     email = serializers.EmailField()
+
+class AddressSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the address model.
+    """
+    street = serializers.CharField(max_length=255, required=True)
+    city = serializers.CharField(max_length=100, required=True)
+    state = serializers.CharField(max_length=100, required=True)
+    country = serializers.CharField(max_length=100, required=True)
+    label = serializers.CharField(max_length=50, required=True)
+    class Meta:
+        model = Address
+        fields = ['street', 'city', 'state', 'country', 'label']
     
+class KYCUpdateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for updating KYC details for a user.
+    Validates first name, last name, physical address, phone number, and profile picture.
+    """
+    phone_number = PhoneNumberField(required=True)
+    address = AddressSerializer(write_only=True)
+
+    class Meta:
+        model = None
+        fields = ['first_name', 'last_name', 'address', 'phone_number']
+
+    def validate_first_name(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError("First name must contain only alphabetic characters.")
+        return value
+
+    def validate_last_name(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError("Last name must contain only alphabetic characters.")
+        return value
+
+    def validate_phone_number(self, value):
+        if len(str(value)) < 10 or len(str(value)) > 15:
+            raise serializers.ValidationError("Phone number must be between 10 and 15 digits.")
+        return value
+
+    def update(self, instance, validated_data):
+        address_data = validated_data.pop('address', None)
+        
+        # Update the main model instance
+        instance = super().update(instance, validated_data)
+        if isinstance(instance, Buyer):
+            instance.is_verified_buyer = True
+        elif isinstance(instance, Seller):
+            instance.is_verified_seller = True
+        instance.save()
+        
+        # Handle address data if provided
+        if address_data:
+            content_type = ContentType.objects.get_for_model(instance)
+
+            Address.objects.update_or_create(
+                user_type=content_type,
+                object_id=instance.id,
+                defaults=address_data
+            )
+
+        return instance
+    
+class BuyerKYCUpdateSerializer(KYCUpdateSerializer):
+    """
+    Serializer for updating KYC details for a Buyer.
+    Inherits from the base KYCUpdateSerializer.
+    """
+    class Meta(KYCUpdateSerializer.Meta):
+        model = Buyer
+        fields = KYCUpdateSerializer.Meta.fields
+
+class SellerKYCUpdateSerializer(KYCUpdateSerializer):
+    """
+    Serializer for updating KYC details for a Seller.
+    Inherits from the base KYCUpdateSerializer.
+    """
+    account_name = serializers.CharField(max_length=100, required=True)
+    account_number = serializers.CharField(max_length=20, required=True)
+    bank_name = serializers.CharField(max_length=100, required=True)
+    class Meta(KYCUpdateSerializer.Meta):
+        model = Seller
+        fields = KYCUpdateSerializer.Meta.fields + ['account_name', 'account_number', 'bank_name']

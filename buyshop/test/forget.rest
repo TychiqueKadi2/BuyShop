@@ -1,0 +1,7 @@
+post http://localhost:8000/auth/forgot-password/user/
+content-type: application/json
+
+{
+    "email": "lekanmojibola@gmail.com"
+}
+

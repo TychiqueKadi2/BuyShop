@@ -1,0 +1,13 @@
+POST http://localhost:8000/product/create/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDk4MzQzLCJpYXQiOjE3NDU0OTQ3NDMsImp0aSI6IjVkODJkN2Q4MWNlMzRiYjE5MTM4MWZlYzMwOGVjNzQ0IiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.qDl3Y8-d1RoTEFsCW9Rg08Ae9a-FLDphwd1XROo8rZY
+Content-Type: application/json
+
+{
+  "name": "Smart Radio",
+  "description": "A 55-inch 4K UHD Smart Radio with HDR support.",
+  "price": 185000,
+  "quantity": 10,
+  "condition": "new",
+  "city": "Lagos",
+  "categories": ["Electronics", "Home"]
+}

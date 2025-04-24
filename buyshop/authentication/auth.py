@@ -26,14 +26,13 @@ class CustomJWTAuthentication(JWTAuthentication):
             except ValueError:
                 raise InvalidToken("User ID in token is not a valid UUID")
 
-            # Based on user_type, determine whether to fetch from Buyer or Seller model
             try:
-                user = Buyer.objects.get(id=user_id)  # Fetch the Buyer model if user_type is 'buyer'
+                user = Buyer.objects.get(id=user_id) 
                 logger.info(f"Found Buyer with id: {user_id}")
                 return user
             except Buyer.DoesNotExist:
                 try:
-                    user = Seller.objects.get(id=user_id)  # Fetch the Seller model if user_type is 'seller'
+                    user = Seller.objects.get(id=user_id)
                     logger.info(f"Found Seller with id: {user_id}")
                     return user
                 except Seller.DoesNotExist:

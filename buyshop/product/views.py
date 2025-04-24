@@ -5,6 +5,9 @@ from .models import Product
 from .serializers import ProductSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.db.models import Q
+from authentication.utils import IsSeller
+
 
 class ProductCreateView(generics.CreateAPIView):
     """
@@ -12,14 +15,14 @@ class ProductCreateView(generics.CreateAPIView):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsSeller]
 
     @swagger_auto_schema(
         operation_summary="Create a new product",
         operation_description="Allows authenticated sellers to create a new product by providing details like name, description, price, condition, categories, and images.",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            required=['name', 'description', 'price', 'quantity', 'condition'],
+            required=['name', 'description', 'price', 'quantity', 'condition', 'categories'],
             properties={
                 'name': openapi.Schema(
                     type=openapi.TYPE_STRING,
@@ -38,6 +41,10 @@ class ProductCreateView(generics.CreateAPIView):
                     type=openapi.TYPE_INTEGER,
                     description="Number of items in stock"
                 ),
+                'city': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="City where the product is located"
+                ),
                 'condition': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     enum=["new", "fairly used", "old"],
@@ -51,7 +58,7 @@ class ProductCreateView(generics.CreateAPIView):
                 'new_images': openapi.Schema(
                     type=openapi.TYPE_ARRAY,
                     items=openapi.Items(type=openapi.TYPE_FILE),
-                    description="Optional: List of image files to upload"
+                    description="List of image files to upload"
                 )
             }
         ),
@@ -63,7 +70,13 @@ class ProductCreateView(generics.CreateAPIView):
     )
     def perform_create(self, serializer):
         serializer.save(seller=self.request.user)
-
+        
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response({
+            "message": "Product created successfully",
+            "product": response.data
+        }, status=status.HTTP_201_CREATED)
 
 class ProductUpdateView(generics.RetrieveUpdateAPIView):
     """
@@ -71,7 +84,9 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsSeller]
+    lookup_field = 'id'
+    lookup_url_kwarg = 'id'
 
     @swagger_auto_schema(
         operation_summary="Update an existing product",
@@ -88,7 +103,17 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
         Override update to handle custom response.
         """
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        print("KWARGS:", kwargs)
+        try:
+            instance = self.get_object()
+        except Exception as e:
+            print("DEBUG: get_object() failed:", str(e))
+            raise  # Let it bubble to see full stack
+        if instance.seller != request.user:
+            return Response(
+                {'error': 'You do not have permission to update this product'},
+                status=status.HTTP_403_FORBIDDEN
+            )
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
@@ -97,3 +122,115 @@ class ProductUpdateView(generics.RetrieveUpdateAPIView):
             "message": "Product updated successfully",
             "product": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class DeleteProductView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated, IsSeller]
+    lookup_field = 'id'
+
+    @swagger_auto_schema(
+        operation_description="Delete a product by its ID.",
+        responses={
+            204: openapi.Response(description="Product deleted successfully"),
+            404: openapi.Response(description="Product not found"),
+            401: openapi.Response(description="Authentication required")
+        }
+    )
+    def delete(self, request, *args, **kwargs):
+        try:
+            product = self.get_object()
+            if product.seller != request.user:
+                return Response(
+                    {'error': 'You do not have permission to delete this product'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            product.delete()
+            return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_summary="List all products with pagination",
+        operation_description="Returns a paginated list of products. Use `?page=1`, `?page=2` etc. in the URL.",
+        responses={
+            200: openapi.Response("Paginated list of products", ProductSerializer(many=True)),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class ProductByBuyerCityView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        request = self.request
+        user = request.user
+        cookie_type = request.COOKIES.get('user_type')
+
+        if cookie_type != 'buyer':
+            return Product.objects.none()
+
+        # Get the content type for the user model
+        user_type = ContentType.objects.get_for_model(user.__class__)
+        try:
+            address = Address.objects.get(user_type=user_type, object_id=user.id)
+            city = address.city
+        except Address.DoesNotExist:
+            return Product.objects.none()
+
+        return Product.objects.filter(city=city, is_available=True)
+
+    @swagger_auto_schema(
+        operation_summary="List products in the same city as the buyer",
+        operation_description="Returns available products whose sellers are in the same city as the authenticated buyer.",
+        responses={
+            200: openapi.Response("List of products", ProductSerializer(many=True)),
+            401: "Unauthorized",
+            403: "Forbidden - Only buyers can access this view",
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        if request.COOKIES.get('user_type') != 'buyer':
+            return Response({"error": "Only buyers can access this view."}, status=status.HTTP_403_FORBIDDEN)
+        return self.list(request, *args, **kwargs)
+
+
+class SearchItemsView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned products to those matching the search parameters.
+        """
+        queryset = Product.objects.all()
+
+        search_query = self.request.query_params.get('search', None)
+        category_query = self.request.query_params.get('category', None)
+        
+        # Filtering based on search terms (name, category)
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
+
+        if category_query:
+            queryset = queryset.filter(categories__name__icontains=category_query)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        """
+        Handles GET requests and returns the filtered products list.
+        """
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

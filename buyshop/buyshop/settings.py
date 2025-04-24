@@ -2,6 +2,7 @@ from datetime import timedelta
 import dj_database_url
 from decouple import config
 import os
+import cloudinary
 
 """
 Django settings for buyshop project.
@@ -27,11 +28,21 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-MEDIA_URL = '/media/'  # URL to access media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory to store uploaded media files
+# Cloudinary settings
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_NAME = config('CLOUDINARY_CLOUD_NAME')
+MEDIA_URL = f'https://res.cloudinary.com/{CLOUDINARY_NAME}/'
 ALLOWED_HOSTS = ['localhost']
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost',
@@ -46,10 +57,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'phonenumber_field',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,9 +64,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt.token_blacklist',
     'authentication',
     'product',
-    'deviceinfo',
+    'django_celery_beat',   # for the beat tables
+    'trade.apps.TradeConfig',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -71,8 +82,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
-    'deviceinfo.middleware.DeviceInfoMiddleware',
 ]
 
 ROOT_URLCONF = 'buyshop.urls'
@@ -80,7 +89,6 @@ CORS_ALLOW_CREDENTIALS = True
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  
-    'allauth.account.auth_backends.AuthenticationBackend',  
 ]
 
 TEMPLATES = [
@@ -104,6 +112,8 @@ REST_FRAMEWORK = {
         'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10  
 }
 
 OTP_VALIDITY_MINUTES = 60
@@ -112,9 +122,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
-
+    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_ENABLED': True,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
@@ -146,13 +156,18 @@ ASGI_APPLICATION = 'buyshop.asgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL'),
-        conn_max_age=0,
+        conn_max_age=600,
         ssl_require=True
     )
 }
+# settings.py
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Ensure Redis is running
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
