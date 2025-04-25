@@ -7,7 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 # Use the production URL as the default for Swagger
-swagger_url = "buyshop.onrender.com"
+
 
 # Define the schema view for Swagger UI
 schema_view = get_schema_view(
@@ -25,7 +25,6 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
-    url=swagger_url,  # Static URL for production
 )
 
 urlpatterns = [

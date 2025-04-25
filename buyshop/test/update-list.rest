@@ -1,0 +1,13 @@
+patch http://localhost:8000/product/update/db33f3a2-b991-4eb3-a714-266f123685e7/
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTAyODM1LCJpYXQiOjE3NDU0OTkyMzUsImp0aSI6Ijk1OTIzMzVhNjBmZDQxMzRhOWQ1NGQzOWNlOTE4ZWVlIiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.mVyHoFrVhmS_65AIaOIQtEQtQNW9UjB9liHEGASbd4U
+
+{
+  "name": "Smart Radio",
+  "description": "A 55-inch 4K UHD Smart Radio with HDR support.",
+  "price": 195000,
+  "quantity": 10,
+  "condition": "new",
+  "city": "Lagos",
+  "categories": ["Mechanics", "Home"]
+}

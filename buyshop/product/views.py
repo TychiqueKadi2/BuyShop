@@ -5,8 +5,10 @@ from .models import Product
 from .serializers import ProductSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from django.db.models import Q
-from authentication.utils import IsSeller
+from django.db.models import Q, Case, When, IntegerField
+from authentication.utils import IsSeller, IsBuyer
+from django.contrib.contenttypes.models import ContentType
+from authentication.models import Address
 
 
 class ProductCreateView(generics.CreateAPIView):
@@ -154,7 +156,7 @@ class DeleteProductView(generics.DestroyAPIView):
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
 
     @swagger_auto_schema(
         operation_summary="List all products with pagination",
@@ -166,31 +168,40 @@ class ProductListView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-class ProductByBuyerCityView(generics.ListAPIView):
+class ProductByBuyerLocationView(generics.ListAPIView):
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
 
     def get_queryset(self):
-        request = self.request
-        user = request.user
-        cookie_type = request.COOKIES.get('user_type')
-
-        if cookie_type != 'buyer':
-            return Product.objects.none()
-
-        # Get the content type for the user model
+        user = self.request.user
         user_type = ContentType.objects.get_for_model(user.__class__)
+
         try:
             address = Address.objects.get(user_type=user_type, object_id=user.id)
-            city = address.city
+            buyer_city = address.city
+            buyer_state = address.state
+            buyer_country = address.country
         except Address.DoesNotExist:
             return Product.objects.none()
 
-        return Product.objects.filter(city=city, is_available=True)
+        # Filter by availability and same country and state
+        queryset = Product.objects.filter(
+            is_available=True,
+            country=buyer_country,
+            state=buyer_state
+        ).annotate(
+            priority=Case(
+                When(city=buyer_city, then=0),  # Products in the same city come first
+                default=1,
+                output_field=IntegerField()
+            )
+        ).order_by('priority', '-created_at')
+
+        return queryset
 
     @swagger_auto_schema(
-        operation_summary="List products in the same city as the buyer",
-        operation_description="Returns available products whose sellers are in the same city as the authenticated buyer.",
+        operation_summary="List products in the same city/state as the buyer",
+        operation_description="Returns available products ordered by priority: same city first, then same state within the same country.",
         responses={
             200: openapi.Response("List of products", ProductSerializer(many=True)),
             401: "Unauthorized",
@@ -198,10 +209,7 @@ class ProductByBuyerCityView(generics.ListAPIView):
         }
     )
     def get(self, request, *args, **kwargs):
-        if request.COOKIES.get('user_type') != 'buyer':
-            return Response({"error": "Only buyers can access this view."}, status=status.HTTP_403_FORBIDDEN)
         return self.list(request, *args, **kwargs)
-
 
 class SearchItemsView(generics.ListAPIView):
     serializer_class = ProductSerializer
