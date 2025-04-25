@@ -1,11 +1,11 @@
 ### Update Seller KYC
 PUT http://localhost:8000/auth/seller/kyc/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkxODQxLCJpYXQiOjE3NDU1ODgyNDEsImp0aSI6Ijc3ZWM1NDdhODcwODRlMDRiODU2NWQ0NjEzYTM2NGFjIiwidXNlcl9pZCI6ImE1NTA2MDQ3LTAwOWQtNDJkOC04YWU2LTUxMTQ2OTY5YWVjOCJ9.lumDYqW2-pSjS5yPEtooVolct-yjiuB15Y5KuGf0-nU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NjAzNzI3LCJpYXQiOjE3NDU2MDAxMjcsImp0aSI6IjQ0YWI0ZTgwNDBjZTQ3OWZiODUzMDFiMWY4YzMxMWNhIiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.zWbIKJeQDPmO9f3WwgKMup06hBVMtpGBF7fMM5wZKpY
 
 {
-  "first_name": "John",
-  "last_name": "Bull",
+  "first_name": "Gloria",
+  "last_name": "Ogunleye",
   "phone_number": "+2347049906335",
   "address": {
     "street": "45 Market Road",
@@ -14,7 +14,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "country": "Nigeria",
     "label": "Office"
   },
-  "account_name": "John Bull",
+  "account_name": "Gloria Ogunleye",
   "account_number": "1234567670",
   "bank_name": "GTBank"
 }

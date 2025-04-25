@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, ProductDetailSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Q, Case, When, IntegerField
@@ -157,6 +157,7 @@ class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated, IsBuyer]
+    
 
     @swagger_auto_schema(
         operation_summary="List all products with pagination",
@@ -243,3 +244,24 @@ class SearchItemsView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ProductInfoView(generics.RetrieveAPIView):
+    queryset = Product.objects.select_related("seller").prefetch_related("categories", "images")
+    serializer_class = ProductDetailSerializer
+    lookup_field = "id"
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
+    lookup_url_kwarg = "id"
+    @swagger_auto_schema(
+        operation_summary="Get product details",
+        operation_description="Retrieve detailed information about a specific product by its ID.",
+        responses={
+            200: openapi.Response("Product details", ProductDetailSerializer),
+            404: "Product not found",
+            401: "Unauthorized - Authentication required",
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests and returns the product details.
+        """
+        return self.retrieve(request, *args, **kwargs)
