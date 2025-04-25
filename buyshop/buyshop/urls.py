@@ -8,17 +8,17 @@ from django.conf.urls.static import static
 from django.http import HttpResponse
 
 # Use the production URL as the default for Swagger
-swagger_url = "https://buyshop.onrender.com/swagger/"
 
 def index(request):
     return HttpResponse("Welcome to the BuyShop API!")
+
 # Define the schema view for Swagger UI
 schema_view = get_schema_view(
     openapi.Info(
         title="BuyShop API Documentation",
         default_version="v1",
         description=(
-           "Welcome to the BuyShop API documentation! This API is designed to support an online cash "
+            "Welcome to the BuyShop API documentation! This API is designed to support an online cash "
             "converter platform where individuals can list their used products for sale. It includes features "
             "such as user authentication, KYC updates, and more."
         ),
@@ -27,8 +27,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
-    url=swagger_url,  # Static URL for production
+    permission_classes=(permissions.AllowAny,),  # Or change to IsAuthenticated if needed
 )
 
 urlpatterns = [
@@ -39,5 +38,9 @@ urlpatterns = [
     re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
     path("auth/", include("authentication.urls")),  # Auth views
     path("trade/", include("trade.urls")),  # Trade views
-    path("product/", include("product.urls")), # product views
+    path("product/", include("product.urls")), # Product views
 ]
+
+# Serve static files during development (in production, ensure this is handled by a CDN or web server)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
