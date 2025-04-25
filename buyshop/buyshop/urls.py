@@ -6,7 +6,11 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import user_passes_test
+
+# This function will bypass any authentication check
+def public_access(request):
+    return True
 
 def index(request):
     return HttpResponse("Welcome to the BuyShop API!")
@@ -29,17 +33,20 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-# Apply csrf_exempt to the schema view
-swagger_view = csrf_exempt(schema_view.with_ui("swagger", cache_timeout=0))
-redoc_view = csrf_exempt(schema_view.with_ui("redoc", cache_timeout=0))
-schema_json_view = csrf_exempt(schema_view.without_ui(cache_timeout=0))
+# Apply user_passes_test decorator to bypass authentication for schema views
+swagger_view = user_passes_test(public_access)(schema_view.with_ui("swagger", cache_timeout=0))
+redoc_view = user_passes_test(public_access)(schema_view.with_ui("redoc", cache_timeout=0))
+swagger_schema = user_passes_test(public_access)(schema_view.without_ui(cache_timeout=0))
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),  # Home page
+    
+    # Use the decorated views that bypass authentication
     path("swagger/", swagger_view, name="swagger-ui"),
     path("redoc/", redoc_view, name="schema-redoc"),
-    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_json_view, name="schema-json"),
+    re_path(r"^swagger(?P<format>\.json|\.yaml)$", swagger_schema, name="schema-json"),
+    
     path("auth/", include("authentication.urls")),  # Auth views
     path("trade/", include("trade.urls")),  # Trade views
     path("product/", include("product.urls")), # Product views
