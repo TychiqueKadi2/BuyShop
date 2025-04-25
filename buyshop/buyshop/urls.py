@@ -6,8 +6,7 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
-
-# Use the production URL as the default for Swagger
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     return HttpResponse("Welcome to the BuyShop API!")
@@ -27,20 +26,25 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),  # Or change to IsAuthenticated if needed
+    permission_classes=(permissions.AllowAny,),
 )
+
+# Apply csrf_exempt to the schema view
+swagger_view = csrf_exempt(schema_view.with_ui("swagger", cache_timeout=0))
+redoc_view = csrf_exempt(schema_view.with_ui("redoc", cache_timeout=0))
+schema_json_view = csrf_exempt(schema_view.without_ui(cache_timeout=0))
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),  # Home page
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path("swagger/", swagger_view, name="swagger-ui"),
+    path("redoc/", redoc_view, name="schema-redoc"),
+    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_json_view, name="schema-json"),
     path("auth/", include("authentication.urls")),  # Auth views
     path("trade/", include("trade.urls")),  # Trade views
     path("product/", include("product.urls")), # Product views
 ]
 
-# Serve static files during development (in production, ensure this is handled by a CDN or web server)
+# Serve static files during development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

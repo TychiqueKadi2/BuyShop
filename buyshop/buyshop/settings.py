@@ -109,9 +109,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.auth.CustomJWTAuthentication',
     ),
-        'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10  
 }
@@ -164,8 +161,6 @@ DATABASES = {
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Ensure Redis is running
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-
-FORCE_SCRIPT_NAME = ''  # or adjust to match your base URL if needed
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
