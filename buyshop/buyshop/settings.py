@@ -165,7 +165,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Ensure Redis is running
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
-FORCE_SCRIPT_NAME = '/swagger'  # or adjust to match your base URL if needed
+FORCE_SCRIPT_NAME = ''  # or adjust to match your base URL if needed
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

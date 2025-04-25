@@ -1,4 +1,6 @@
-from .views import ProductCreateView, ProductUpdateView, DeleteProductView, ProductListView, ProductByBuyerLocationView
+from .views import (ProductCreateView, ProductUpdateView, DeleteProductView,
+                    ProductListView, ProductByBuyerLocationView,
+                    SearchItemsView)
 from django.urls import path
 
 urlpatterns = [
@@ -7,4 +9,5 @@ urlpatterns = [
     path('delete/<uuid:id>/', DeleteProductView.as_view(), name="product-delete"),
     path('all/', ProductListView.as_view(), name="product-list"),
     path('city/', ProductByBuyerLocationView.as_view(), name="product-by-city"),
+    path('search/', SearchItemsView.as_view(), name="product-search"),
 ]

@@ -213,6 +213,7 @@ class ProductByBuyerLocationView(generics.ListAPIView):
 
 class SearchItemsView(generics.ListAPIView):
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated, IsBuyer]
 
     def get_queryset(self):
         """
