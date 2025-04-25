@@ -1,5 +1,5 @@
 POST http://localhost:8000/product/create/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTc3MTY3LCJpYXQiOjE3NDU1NzM1NjcsImp0aSI6Ijc0OWE5MzZiNTg0MjQzNGQ4ZjA1NjA0OGIzNmViNjM4IiwidXNlcl9pZCI6ImI2MGY5YTU4LTM1ZDktNDJiZi05NDY3LTNjMDY5MTQyMTdjYyJ9.Ct2rY6bcu3u4L1NE_o_8jQpMV3f_H6xqQKuM2R9IVQ8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkyMDAzLCJpYXQiOjE3NDU1ODg0MDMsImp0aSI6IjNjZTYyNDEyZmRlZjQ0Mjg4MjJmZjlkYzA5OTgwOTc3IiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.cibSZ9ow4elcEaHSAnH4xjLpr2xqYpLok86OWjo5YZ8
 Content-Type: application/json
 
 {
@@ -8,6 +8,8 @@ Content-Type: application/json
   "price": 2000000,
   "quantity": 2,
   "condition": "new",
-  "city": "Jos",
+  "city": "Osogbo",
+  "state": "Osun",
+  "country": "Nigeria",
   "categories": ["Kids", "Home"]
 }

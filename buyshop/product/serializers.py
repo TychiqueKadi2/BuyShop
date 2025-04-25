@@ -15,7 +15,7 @@ class CategorySerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['name']
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
@@ -48,11 +48,11 @@ class ProductSerializer(serializers.ModelSerializer):
             'quantity',
             'condition',
             'is_available',
-            'categories',  # write-only
             'category_details',  # read-only
-            'images',
             'new_images',
             'city',
+            'state',
+            'country',
         ]
         read_only_fields = ['id', 'images', 'category_details']
 

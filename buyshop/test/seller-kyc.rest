@@ -1,20 +1,20 @@
 ### Update Seller KYC
 PUT http://localhost:8000/auth/seller/kyc/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDk3MTgxLCJpYXQiOjE3NDU0OTM1ODEsImp0aSI6Ijk4MzI1NWZlZjQ1MjQ4Mzg4ZjA0NzA2N2MxMzIwYTMyIiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.Gf306uc0lhEC_LL-ZjLj6lTh1gVQue_pLvInb878oB8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkxODQxLCJpYXQiOjE3NDU1ODgyNDEsImp0aSI6Ijc3ZWM1NDdhODcwODRlMDRiODU2NWQ0NjEzYTM2NGFjIiwidXNlcl9pZCI6ImE1NTA2MDQ3LTAwOWQtNDJkOC04YWU2LTUxMTQ2OTY5YWVjOCJ9.lumDYqW2-pSjS5yPEtooVolct-yjiuB15Y5KuGf0-nU
 
 {
-  "first_name": "Alabi",
-  "last_name": "Akinlabi",
-  "phone_number": "+2347012345678",
+  "first_name": "John",
+  "last_name": "Bull",
+  "phone_number": "+2347049906335",
   "address": {
     "street": "45 Market Road",
-    "city": "Ibadan",
-    "state": "Oyo",
+    "city": "Oke-Baale",
+    "state": "Osogbo",
     "country": "Nigeria",
     "label": "Office"
   },
-  "account_name": "Alabi Akinlabi",
-  "account_number": "1234567890",
+  "account_name": "John Bull",
+  "account_number": "1234567670",
   "bank_name": "GTBank"
 }

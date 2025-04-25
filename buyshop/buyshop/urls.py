@@ -5,10 +5,13 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 
 # Use the production URL as the default for Swagger
+swagger_url = "https://buyshop.onrender.com/swagger/"
 
-
+def index(request):
+    return HttpResponse("Welcome to the BuyShop API!")
 # Define the schema view for Swagger UI
 schema_view = get_schema_view(
     openapi.Info(
@@ -25,10 +28,12 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    url=swagger_url,  # Static URL for production
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", index, name="index"),  # Home page
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
@@ -36,6 +41,3 @@ urlpatterns = [
     path("trade/", include("trade.urls")),  # Trade views
     path("product/", include("product.urls")), # product views
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

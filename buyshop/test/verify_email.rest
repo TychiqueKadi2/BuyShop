@@ -3,15 +3,15 @@ Content-Type: application/json
 
 # {
 #     "email": "oladev123@gmail.com",
-#     "otp": "2042"
-# }
-
-# {
-#     "email": "lekanmojibola@gmail.com",
-#     "otp": "5843"
+#     "otp": "7040"
 # }
 
 {
-    "email": "lekan4jesu@gmail.com",
-    "otp": "9653"
+    "email": "lekanmojibola@gmail.com",
+    "otp": "6750"
 }
+
+# {
+#     "email": "lekan4jesu@gmail.com",
+#     "otp": "9482"
+# }

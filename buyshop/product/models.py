@@ -25,6 +25,7 @@ class Product(models.Model):
     CONDITION_CHOICES = (
         ('new', 'New'),
         ('fairly_used', 'Fairly Used'),
+        ('refurbished', 'Refurbished'),
         ('old', 'Old')
     )
 
