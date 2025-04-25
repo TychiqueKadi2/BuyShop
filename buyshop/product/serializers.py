@@ -47,6 +47,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'price',
             'quantity',
             'condition',
+            'categories',  # write-only
+            'images',  # read-only
             'is_available',
             'category_details',  # read-only
             'new_images',

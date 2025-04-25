@@ -1,13 +1,8 @@
-patch http://localhost:8000/product/update/db33f3a2-b991-4eb3-a714-266f123685e7/
+patch http://localhost:8000/product/update/b77e819e-357b-4f94-a889-835b7c2f77b6/
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTAyODM1LCJpYXQiOjE3NDU0OTkyMzUsImp0aSI6Ijk1OTIzMzVhNjBmZDQxMzRhOWQ1NGQzOWNlOTE4ZWVlIiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.mVyHoFrVhmS_65AIaOIQtEQtQNW9UjB9liHEGASbd4U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkyMDAzLCJpYXQiOjE3NDU1ODg0MDMsImp0aSI6IjNjZTYyNDEyZmRlZjQ0Mjg4MjJmZjlkYzA5OTgwOTc3IiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.cibSZ9ow4elcEaHSAnH4xjLpr2xqYpLok86OWjo5YZ8
 
 {
-  "name": "Smart Radio",
-  "description": "A 55-inch 4K UHD Smart Radio with HDR support.",
-  "price": 195000,
-  "quantity": 10,
-  "condition": "new",
-  "city": "Lagos",
-  "categories": ["Mechanics", "Home"]
+    "country": "Nigeria",
+    "state": "Osun"
 }
