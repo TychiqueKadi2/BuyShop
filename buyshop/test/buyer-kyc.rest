@@ -1,7 +1,7 @@
 ### Update Buyer KYC
-PUT http://localhost:8000/auth/buyer/kyc/
+PATCH  http://localhost:8000/auth/buyer/kyc/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkxNjgyLCJpYXQiOjE3NDU1ODgwODIsImp0aSI6IjQ2ZDhhMmRiYTc2ZjQxOGRhZjRmZWE4N2JmODNmZDY1IiwidXNlcl9pZCI6ImMzOTUxYjJhLTczOGUtNDc4NC1iMzk3LWUzYWZmOGEyNmU3YSJ9.4U3-tt7KjU0BHHT9L3KQEjGSdhGAZ-_lDLGtf2w4J-E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NzQ5MDQ0LCJpYXQiOjE3NDY3NDU0NDQsImp0aSI6IjBiY2RhZTFkZTU1YTRlYzI4OTBmNjU2MmUzYWM1MGY0IiwidXNlcl9pZCI6Ijg3OTg3MGM0LTg0YTQtNGViMy1iNmIyLTMwYjAyZTg4NjBjYyJ9.LRNBX-T7vOh2F6GJUpUfXNy2UTVyJbHo3O06CtblW8U
 
 {
   "first_name": "Mojibola",

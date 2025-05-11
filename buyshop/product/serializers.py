@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Product, ProductImage, Category
-from authentication.models import Seller, Address
-from django.contrib.contenttypes.models import ContentType
+from authentication.models import User, Address
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -58,8 +57,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'city',
             'state',
             'country',
+            'created_at',
         ]
-        read_only_fields = ['id', 'images', 'category_details']
+        read_only_fields = ['id', 'images', 'category_details', 'created_at']
 
     def create(self, validated_data):
         category_names = validated_data.pop('categories', [])
@@ -97,39 +97,14 @@ class ProductSerializer(serializers.ModelSerializer):
         return instance
 
 class SellerInfoSerializer(serializers.ModelSerializer):
-    city    = serializers.SerializerMethodField()
-    state   = serializers.SerializerMethodField()
-    country = serializers.SerializerMethodField()
-
     class Meta:
-        model = Seller
+        model = User
         fields = [
             "first_name",
             "last_name",
             "phone_number",
-            "email",
-            "city",
-            "state",
-            "country",
+            "email"
         ]
-
-    def _get_primary_address(self, obj):
-        # Assumes you defined on Seller:
-        #   address = GenericRelation('Address', content_type_field='user_type', object_id_field='object_id')
-        return obj.address.first()  # None if they haven’t set any
-
-    def get_city(self, obj):
-        addr = self._get_primary_address(obj)
-        return addr.city if addr else None
-
-    def get_state(self, obj):
-        addr = self._get_primary_address(obj)
-        return addr.state if addr else None
-
-    def get_country(self, obj):
-        addr = self._get_primary_address(obj)
-        return addr.country if addr else None
-
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     seller_info = SellerInfoSerializer(source="seller", read_only=True)

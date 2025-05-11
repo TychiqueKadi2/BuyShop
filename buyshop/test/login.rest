@@ -8,7 +8,7 @@ Content-Type: application/json
 
 # {
 #     "email": "lekanmojibola@gmail.com",
-#     "password": "oladev123"
+#     "password": "olami123"
 # }
 
 {

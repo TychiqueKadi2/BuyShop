@@ -1,8 +1,8 @@
-patch http://localhost:8000/product/update/b77e819e-357b-4f94-a889-835b7c2f77b6/
+patch http://localhost:8000/product/update/6334ffa7-8452-4a72-827d-dcb279623972/
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkyMDAzLCJpYXQiOjE3NDU1ODg0MDMsImp0aSI6IjNjZTYyNDEyZmRlZjQ0Mjg4MjJmZjlkYzA5OTgwOTc3IiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.cibSZ9ow4elcEaHSAnH4xjLpr2xqYpLok86OWjo5YZ8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NzQ3NzQ0LCJpYXQiOjE3NDY3NDQxNDQsImp0aSI6IjE0NWU4NjE2M2JhZDQ5NTQ4MTY4ZDA0ZjQyZGI1MTkxIiwidXNlcl9pZCI6IjhjZmZmYTNlLTE0OTItNGFhNy04YzhjLTQ1NTBlYWNmNWU1YyJ9.V_gJoyS6b5X2sj1KLkxA9YiXulfWdtCRVAJ8PMXTAyE
 
 {
-    "country": "Nigeria",
+    "city": "Osogbo",
     "state": "Osun"
 }

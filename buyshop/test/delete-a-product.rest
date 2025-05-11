@@ -1,3 +1,3 @@
-delete http://localhost:8000/product/delete/885cfed5-0394-40aa-a6a5-b9aeb6b1832a/
+delete http://localhost:8000/product/delete/20ce6fee-16d6-4e32-84ff-421f24b7b607/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NDk4MzQzLCJpYXQiOjE3NDU0OTQ3NDMsImp0aSI6IjVkODJkN2Q4MWNlMzRiYjE5MTM4MWZlYzMwOGVjNzQ0IiwidXNlcl9pZCI6IjU5MjY4N2YxLWQxN2MtNDAxMi05MmZhLWI0NGQ1OWM4YzI0NCJ9.qDl3Y8-d1RoTEFsCW9Rg08Ae9a-FLDphwd1XROo8rZY

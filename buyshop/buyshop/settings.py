@@ -144,7 +144,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-AUTH_USER_MODEL = 'authentication.AbstractCustomUser'
+AUTH_USER_MODEL = 'authentication.User'
 
 WSGI_APPLICATION = 'buyshop.wsgi.application'
 ASGI_APPLICATION = 'buyshop.asgi.application'
@@ -162,9 +162,9 @@ DATABASES = {
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Ensure Redis is running
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

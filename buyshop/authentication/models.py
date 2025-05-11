@@ -6,10 +6,6 @@ import uuid
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Sum, Count
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericRelation
-
 
 ###############################################################################
 # Base Manager: Shared logic for creating users
@@ -37,45 +33,53 @@ class BaseCustomUserManager(BaseUserManager):
         return self._create_user(email=email, password=password, **extra_fields)
 
 ###############################################################################
-# Abstract Base Model: Common fields for all user types
+# User Model -> Common Fields
 ###############################################################################
-class AbstractCustomUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     """
-    Abstract user model that holds fields and methods common to both clients and drivers.
+    user model that holds fields and methods common to both buyers and sellers.
     """
+
+    ROLE_CHOICES = [
+        ('buyer', 'Buyer'),
+        ('seller', 'Seller'),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     email = models.EmailField(unique=True, max_length=255)
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
+    is_active = models.BooleanField(default=False)
     phone_number = PhoneNumberField(blank=True, null=True)
     is_staff = models.BooleanField(default=False)
-    address = GenericRelation('Address', content_type_field='user_type', object_id_field='object_id',)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='buyer')  # Role field
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = BaseCustomUserManager()
-
-
+    def __str__(self):
+            return f"{self.email} ({self.get_role_display()})"
 ###############################################################################
 # Buyer Model
 ###############################################################################
-class Buyer(AbstractCustomUser):
+class BuyerProfile(models.Model):
     """
-        Buyer model that extends the abstract custom user with client-specific fields.
+        Buyer model that extends the custom user with client-specific fields.
     """
+    total_products_purchased = models.PositiveIntegerField(default=0)
+    total_spent = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_verified_buyer = models.BooleanField(default=False)
-    user_type = models.CharField(max_length=10, default='buyer')
 
 
 ###############################################################################
 # Seller Model (updated for optional KYC fields)
 ###############################################################################
-class Seller(AbstractCustomUser):
+class SellerProfile(models.Model):
     """
-    Seller model that extends the abstract custom user with seller-specific fields.
+    Seller model that extends the custom user with seller-specific fields.
     """
 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller', null=True, blank=True)
     total_sales_completed = models.PositiveIntegerField(default=0)
     earnings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
@@ -85,7 +89,6 @@ class Seller(AbstractCustomUser):
     account_number = models.CharField(max_length=20, blank=True, null=True)
     total_revenue = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     is_verified_seller = models.BooleanField(default=False)
-    user_type = models.CharField(max_length=10, default='seller')
 
     def update_rating(self):
         result = self.ratings.aggregate(total_value=Sum('rating'), total_count=Count('id'))
@@ -107,19 +110,14 @@ class OTP(models.Model):
     This model supports both client users and drivers by allowing only one of the
     relationships to be set.
     """
-    buyer = models.OneToOneField(Buyer, on_delete=models.CASCADE, related_name='otp', null=True, blank=True)
-    seller = models.OneToOneField(Seller, on_delete=models.CASCADE, related_name='otp', null=True, blank=True)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='otp')
     code = models.CharField(max_length=4)  # 4-digit OTP code
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
-        if self.user:
-            return f"OTP for {self.user.email}"
-        elif self.driver:
-            return f"OTP for {self.driver.email}"
-        else:
-            return "Unassigned OTP"
+        return f"OTP for {self.user.email}"
 
     def is_expired(self):
         """
@@ -130,12 +128,11 @@ class OTP(models.Model):
 
 
 class Address(models.Model):
+    """
+    Address model directly linked to the User model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    # These two fields define the generic relation
-    user_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.UUIDField()
-    user = GenericForeignKey('user_type', 'object_id')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses', blank=True, null=True)  # Direct relation to User
 
     street = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)

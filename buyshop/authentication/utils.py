@@ -97,8 +97,7 @@ class IsBuyer(BasePermission):
     Custom permission to only allow buyers to access the view.
     """
     def has_permission(self, request, view):
-        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'buyer'
-
+        return request.user.is_authenticated and getattr(request.user, 'role', None) == 'buyer'
 class IsSeller(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and getattr(request.user, 'user_type', None) == 'seller'
+        return request.user.is_authenticated and getattr(request.user, 'role', None) == 'seller' and request.user.seller.is_verified_seller

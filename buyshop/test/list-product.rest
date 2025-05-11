@@ -1,15 +1,16 @@
 POST http://localhost:8000/product/create/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NTkyMDAzLCJpYXQiOjE3NDU1ODg0MDMsImp0aSI6IjNjZTYyNDEyZmRlZjQ0Mjg4MjJmZjlkYzA5OTgwOTc3IiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.cibSZ9ow4elcEaHSAnH4xjLpr2xqYpLok86OWjo5YZ8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTIxOTY1LCJpYXQiOjE3NDY5MTgzNjUsImp0aSI6IjNhYTljY2U4MjBjNjQ2ODA4YjdjY2Q5YWU5ZWFlMjZjIiwidXNlcl9pZCI6IjhjZmZmYTNlLTE0OTItNGFhNy04YzhjLTQ1NTBlYWNmNWU1YyJ9.fLCzg0_R3YGlzXrX8_YBq9ZHsx00CLpgJfTSF7Jy_c4
 Content-Type: application/json
 
 {
-  "name": "Smart Car",
-  "description": "A 55-inch 4K UHD Smart Car with HDR support.",
-  "price": 195000,
-  "quantity": 10,
+  "name": "Electric Kettle",
+  "description": "A high-performance electric Kettle with a range of 50 miles.",
+  "price": 150000,
+  "quantity": 5,
   "condition": "new",
-  "city": "Agege",
+  "city": "Badagry",
   "state": "Lagos",
   "country": "Nigeria",
-  "categories": ["Electronics", "Home"]
+  "categories": ["Electronics", "Vehicles"]
 }
+

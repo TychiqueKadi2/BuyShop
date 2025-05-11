@@ -1,7 +1,6 @@
 from django.db import models
 import uuid
 from django.utils.text import slugify
-from authentication.models import Buyer, Seller
 from cloudinary.models import CloudinaryField
 
 
@@ -30,8 +29,21 @@ class Product(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    seller = models.ForeignKey(Seller, related_name="product_listed", on_delete=models.SET_NULL, null=True)
-    buyer = models.ForeignKey(Buyer, related_name="product_bought", on_delete=models.SET_NULL, null=True, blank=True)
+    seller = models.ForeignKey(
+        'authentication.User',  # Reference the unified User model
+        related_name="product_listed",
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'role': 'seller'}  # Ensure the user is a seller
+    )
+    buyer = models.ForeignKey(
+        'authentication.User',  # Reference the unified User model
+        related_name="product_bought",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'buyer'}
+    )
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()

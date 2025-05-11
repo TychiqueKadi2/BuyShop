@@ -10,5 +10,17 @@ class BidSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'is_accepted', 'created_at', 'bidder']
 
     def create(self, validated_data):
-        validated_data['bidder'] = self.context['request'].user
+        user = self.context['request'].user
+        product = validated_data['product']
+
+        # Check if the user has already placed a bid on this product
+        if Bid.objects.filter(product=product, bidder=user).exists():
+            raise serializers.ValidationError("You have already placed a bid on this product.")
+
+        validated_data['bidder'] = user
         return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.amount = validated_data.get('amount', instance.amount)
+        instance.save()
+        return instance

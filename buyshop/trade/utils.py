@@ -4,7 +4,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 
-from trade.models import Product
+from product.models import Product
+from .models import Bid
 
 def mark_expired_bids():
     now = timezone.now()
@@ -19,20 +20,23 @@ def mark_expired_bids():
         product.is_available = False
         product.is_bidding_over = True
         product.save()
+        bid_count = Bid.objects.filter(product=product).count()
+        print(f"this is bid count: {bid_count}")
 
         # Send email notification to the seller
         subject = f"Auction Ended: Bids on \"{product.name}\" Have Expired"
         message = (
-            f"Hello {product.seller.first_name or product.seller.email},\n\n"
+            f"Hello {product.seller.first_name},\n\n"
             f"Your auction for the product \"{product.name}\" has just expired after 48 hours with no accepted bid.\n"
-            f"Please log in to your dashboard to review any outstanding bids and decide whether to relist or accept a bid .\n\n"
+            f"You have received a total of {bid_count} bid{'s' if bid_count != 1 else ''} on this product.\n"
+            f"Please log in to your dashboard to review any outstanding bids and decide whether to relist or accept a bid.\n\n"
             f"View your product here: https://your-domain.com/products/{product.slug}/\n\n"
             f"Thank you for using BuyShop!"
         )
         send_mail(
             subject,
             message,
-            settings.DEFAULT_FROM_EMAIL,
+            'noreply@buyshop.com',
             [product.seller.email],
             fail_silently=False,
         )

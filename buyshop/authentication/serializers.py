@@ -3,8 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from phonenumber_field.serializerfields import PhoneNumberField
-from .models import Buyer, Seller, Address
-from django.contrib.contenttypes.models import ContentType
+from .models import User, Address, SellerProfile, BuyerProfile
 
 
 ###############################################################################
@@ -26,7 +25,7 @@ class BaseSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = None 
-        fields = ('email', 'password')
+        fields = ('email', 'password', 'role')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,40 +48,37 @@ class BaseLoginSerializer(serializers.Serializer):
         style={'input_type': 'password'}
     )
 
-    def validate(self, data):
-        email = data.get('email')
-        password = data.get('password')
-        user = authenticate(request=self.context.get('request'), email=email, password=password)
-        if not user:
-            raise serializers.ValidationError("Unable to log in with provided credentials.")
-        data['user'] = user
-        return data
-
 class BuyerSignupSerializer(BaseSignupSerializer):
     """
-    Serializer for client user signup.
-    Only includes email and password; additional fields are handled during KYC.
+    Serializer for buyer signup.
+    Automatically sets the role to 'buyer' during user creation.
     """
     class Meta(BaseSignupSerializer.Meta):
-        model = Buyer
+        model = User  # Use the unified User model
         fields = BaseSignupSerializer.Meta.fields
+
+    def create(self, validated_data):
+        # Set the role to 'buyer' before creating the user
+        validated_data['role'] = 'buyer'
+        return super().create(validated_data)
 
 class BuyerLoginSerializer(BaseLoginSerializer):
     """
     Serializer for user login.
-    Validates email and password directly against the User model.
+    Validates email and password directly against the User model and ensures the user is a buyer.
     """
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
-        try:
-            user = Buyer.objects.get(email=email)
-        except Buyer.DoesNotExist:
-            raise serializers.ValidationError("Invalid credentials for a user.")
-        if not user.check_password(password):
-            raise serializers.ValidationError("Invalid credentials for a user.")
+        user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Unable to log in with provided credentials.")
+        if user.role != 'buyer':
+            raise serializers.ValidationError("This account is not registered as a buyer.")
         if not user.is_active:
-            raise serializers.ValidationError("Account not verified.")
+            raise serializers.ValidationError("Account is not active or verified.")
+
         data['user'] = user
         return data
 
@@ -92,35 +88,53 @@ class BuyerProfileSerializer(serializers.ModelSerializer):
     The email field is read-only.
     """
     class Meta:
-        model = Buyer
-        fields = ('email', 'first_name', 'last_name', 'physical_address', 'phone_number')
-        read_only_fields = ('email',)
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'address', 'phone_number', 'role')
+        read_only_fields = ('email', 'role')
 
 class SellerSignupSerializer(BaseSignupSerializer):
     """
-    Serializer for Seller signup.
-    For Sellers, only email and password are required.
+    Serializer for seller signup.
+    Automatically sets the role to 'seller' during user creation.
     """
     class Meta(BaseSignupSerializer.Meta):
-        model = Seller
-        fields = ('email', 'password')
+        model = User  # Use the unified User model
+        fields = BaseSignupSerializer.Meta.fields
+
+    def create(self, validated_data):
+        # Set the role to 'seller' before creating the user
+        validated_data['role'] = 'seller'
+        return super().create(validated_data)
 
 class SellerLoginSerializer(BaseLoginSerializer):
     """
-    Serializer for Seller login.
-    Validates that the authenticated user is a Seller instance.
+    Serializer for seller login.
+    Validates email and password directly against the User model and ensures the user is a seller.
     """
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
-        try:
-            seller = Seller.objects.get(email=email)
-        except Seller.DoesNotExist:
-            raise serializers.ValidationError("Invalid credentials for a seller.")
-        if not seller.check_password(password):
-            raise serializers.ValidationError("Invalid credentials for a seller.")
-        data['user'] = seller
+        user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Unable to log in with provided credentials.")
+        if user.role != 'seller':
+            raise serializers.ValidationError("This account is not registered as a seller.")
+        if not user.is_active:
+            raise serializers.ValidationError("Account is not active or verified.")
+
+        data['user'] = user
         return data
+
+class SellerProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for retrieving and updating client user profiles.
+    The email field is read-only.
+    """
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'address', 'phone_number', 'role', 'account_name', 'account_number', 'bank_name')
+        read_only_fields = ('email', 'role')
 
 class EmailVerificationSerializer(serializers.Serializer):
     """
@@ -153,13 +167,14 @@ class AddressSerializer(serializers.ModelSerializer):
 class KYCUpdateSerializer(serializers.ModelSerializer):
     """
     Serializer for updating KYC details for a user.
-    Validates first name, last name, physical address, phone number, and profile picture.
+    Validates first name, last name, phone number, and address.
+    Dynamically handles role-specific fields.
     """
     phone_number = PhoneNumberField(required=True)
     address = AddressSerializer(write_only=True)
 
     class Meta:
-        model = None
+        model = User  # Use the unified User model
         fields = ['first_name', 'last_name', 'address', 'phone_number']
 
     def validate_first_name(self, value):
@@ -179,44 +194,63 @@ class KYCUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         address_data = validated_data.pop('address', None)
-        
-        # Update the main model instance
-        instance = super().update(instance, validated_data)
-        if isinstance(instance, Buyer):
-            instance.is_verified_buyer = True
-        elif isinstance(instance, Seller):
-            instance.is_verified_seller = True
-        instance.save()
-        
-        # Handle address data if provided
-        if address_data:
-            content_type = ContentType.objects.get_for_model(instance)
 
+        # Update base user fields
+        instance = super().update(instance, validated_data)
+
+        # Handle address update
+        if address_data:
             Address.objects.update_or_create(
-                user_type=content_type,
-                object_id=instance.id,
+                user=instance,
                 defaults=address_data
             )
 
+        # Create or update role-specific profile
+        if instance.role == 'seller':
+            seller_profile, _ = SellerProfile.objects.get_or_create(user=instance)
+            seller_profile.is_verified_seller = True
+            seller_profile.save()
+
+        elif instance.role == 'buyer':
+            buyer_profile, _ = BuyerProfile.objects.get_or_create(user=instance)
+            buyer_profile.is_verified_buyer = True
+            buyer_profile.save()
+
         return instance
-    
-class BuyerKYCUpdateSerializer(KYCUpdateSerializer):
-    """
-    Serializer for updating KYC details for a Buyer.
-    Inherits from the base KYCUpdateSerializer.
-    """
-    class Meta(KYCUpdateSerializer.Meta):
-        model = Buyer
-        fields = KYCUpdateSerializer.Meta.fields
+
 
 class SellerKYCUpdateSerializer(KYCUpdateSerializer):
-    """
-    Serializer for updating KYC details for a Seller.
-    Inherits from the base KYCUpdateSerializer.
-    """
-    account_name = serializers.CharField(max_length=100, required=True)
-    account_number = serializers.CharField(max_length=20, required=True)
-    bank_name = serializers.CharField(max_length=100, required=True)
+    account_name = serializers.SerializerMethodField()
+    account_number = serializers.SerializerMethodField()
+    bank_name = serializers.SerializerMethodField()
+
     class Meta(KYCUpdateSerializer.Meta):
-        model = Seller
-        fields = KYCUpdateSerializer.Meta.fields + ['account_name', 'account_number', 'bank_name']
+        model = User
+        fields = KYCUpdateSerializer.Meta.fields + [
+            'account_name', 'account_number', 'bank_name'
+        ]
+
+    def get_account_name(self, obj):
+        return getattr(obj.seller, 'account_name', None)
+
+    def get_account_number(self, obj):
+        return getattr(obj.seller, 'account_number', None)
+
+    def get_bank_name(self, obj):
+        return getattr(obj.seller, 'bank_name', None)
+
+    def update(self, instance, validated_data):
+        account_name = validated_data.pop('account_name', None)
+        account_number = validated_data.pop('account_number', None)
+        bank_name = validated_data.pop('bank_name', None)
+
+        seller_profile, _ = SellerProfile.objects.get_or_create(user=instance)
+        if account_name: seller_profile.account_name = account_name
+        if account_number: seller_profile.account_number = account_number
+        if bank_name: seller_profile.bank_name = bank_name
+        seller_profile.is_verified_seller = True
+        seller_profile.save()
+
+        return super().update(instance, validated_data)
+
+

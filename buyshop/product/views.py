@@ -7,7 +7,6 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Q, Case, When, IntegerField
 from authentication.utils import IsSeller, IsBuyer
-from django.contrib.contenttypes.models import ContentType
 from authentication.models import Address
 
 
@@ -46,6 +45,14 @@ class ProductCreateView(generics.CreateAPIView):
                 'city': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description="City where the product is located"
+                ),
+                'state': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="State where the product is located"
+                ),
+                'country': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="Country where the product is located"
                 ),
                 'condition': openapi.Schema(
                     type=openapi.TYPE_STRING,
@@ -154,7 +161,7 @@ class DeleteProductView(generics.DestroyAPIView):
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('created_at')
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated, IsBuyer]
     
@@ -175,10 +182,9 @@ class ProductByBuyerLocationView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        user_type = ContentType.objects.get_for_model(user.__class__)
-
+        
         try:
-            address = Address.objects.get(user_type=user_type, object_id=user.id)
+            address = Address.objects.get(user=user)
             buyer_city = address.city
             buyer_state = address.state
             buyer_country = address.country
@@ -196,7 +202,7 @@ class ProductByBuyerLocationView(generics.ListAPIView):
                 default=1,
                 output_field=IntegerField()
             )
-        ).order_by('priority', '-created_at')
+        ).order_by('priority', 'created_at')
 
         return queryset
 
@@ -217,15 +223,14 @@ class SearchItemsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsBuyer]
 
     def get_queryset(self):
-        """
-        Optionally restricts the returned products to those matching the search parameters.
-        """
         queryset = Product.objects.all()
 
-        search_query = self.request.query_params.get('search', None)
-        category_query = self.request.query_params.get('category', None)
-        
-        # Filtering based on search terms (name, category)
+        search_query = self.request.query_params.get('search')
+        category_query = self.request.query_params.get('category')
+        city = self.request.query_params.get('city')
+        state = self.request.query_params.get('state')
+        country = self.request.query_params.get('country')
+
         if search_query:
             queryset = queryset.filter(
                 Q(name__icontains=search_query) |
@@ -234,6 +239,15 @@ class SearchItemsView(generics.ListAPIView):
 
         if category_query:
             queryset = queryset.filter(categories__name__icontains=category_query)
+
+        if city:
+            queryset = queryset.filter(city__icontains=city)
+
+        if state:
+            queryset = queryset.filter(state__icontains=state)
+
+        if country:
+            queryset = queryset.filter(country__icontains=country)
 
         return queryset
 
@@ -249,7 +263,7 @@ class ProductInfoView(generics.RetrieveAPIView):
     queryset = Product.objects.select_related("seller").prefetch_related("categories", "images")
     serializer_class = ProductDetailSerializer
     lookup_field = "id"
-    permission_classes = [permissions.IsAuthenticated, IsBuyer]
+    permission_classes = [permissions.IsAuthenticated]
     lookup_url_kwarg = "id"
     @swagger_auto_schema(
         operation_summary="Get product details",

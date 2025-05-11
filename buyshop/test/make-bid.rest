@@ -1,0 +1,8 @@
+post http://localhost:8000/trade/bid/
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1ODAxMjQ2LCJpYXQiOjE3NDU3OTc2NDYsImp0aSI6ImFiMzM4ZWQ1NTJhNjQ4MzM5NDI2ODk0YmIzMDdmY2FkIiwidXNlcl9pZCI6ImE1NTA2MDQ3LTAwOWQtNDJkOC04YWU2LTUxMTQ2OTY5YWVjOCJ9.l9NKack007kTLl03XlUCGazRGSgyF3V8Pyeyw1Emhpg
+
+{
+    "product": "da2c0658-0c42-4d54-90c8-286f072c73f0",
+    "amount": 270000
+}

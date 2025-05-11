@@ -1,7 +1,7 @@
 ### Update Seller KYC
-PUT http://localhost:8000/auth/seller/kyc/
+PATCH  http://localhost:8000/auth/seller/kyc/8cfffa3e-1492-4aa7-8c8c-4550eacf5e5c/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NjAzNzI3LCJpYXQiOjE3NDU2MDAxMjcsImp0aSI6IjQ0YWI0ZTgwNDBjZTQ3OWZiODUzMDFiMWY4YzMxMWNhIiwidXNlcl9pZCI6IjYzNTc3ZDI3LTllM2QtNGQ3OC04NmRlLWMxMzVhMzA4MDE3NSJ9.zWbIKJeQDPmO9f3WwgKMup06hBVMtpGBF7fMM5wZKpY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1ODQyNTIyLCJpYXQiOjE3NDU4Mzg5MjIsImp0aSI6IjU4Njc5ZWZkYzMyNDRiZThiOWI5ZmNmZWNjYTFkNTY5IiwidXNlcl9pZCI6IjhjZmZmYTNlLTE0OTItNGFhNy04YzhjLTQ1NTBlYWNmNWU1YyJ9.IeVmFf72E3M4xDp-r39RiD-GJ4IGF5oDUuqkrb6XUAk
 
 {
   "first_name": "Gloria",

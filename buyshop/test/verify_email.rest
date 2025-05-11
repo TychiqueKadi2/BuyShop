@@ -1,17 +1,17 @@
 post http://localhost:8000/auth/verify-email/
 Content-Type: application/json
 
-# {
-#     "email": "oladev123@gmail.com",
-#     "otp": "7040"
-# }
-
 {
-    "email": "lekanmojibola@gmail.com",
-    "otp": "6750"
+    "email": "oladev123@gmail.com",
+    "otp": "4332"
 }
 
 # {
+#     "email": "lekanmojibola@gmail.com",
+#     "otp": "3916"
+# }
+
+# {
 #     "email": "lekan4jesu@gmail.com",
-#     "otp": "9482"
+#     "otp": "8815"
 # }
